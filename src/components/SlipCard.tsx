@@ -1,8 +1,11 @@
+import { useState } from 'react';
 import { Lock, TrendingUp, Shield, Flame, Users } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { useToast } from '@/hooks/use-toast';
+import confetti from 'canvas-confetti';
 
 interface SlipCardProps {
   tipsterName: string;
@@ -31,12 +34,57 @@ export const SlipCard = ({
   verified,
   isPurchased = false,
 }: SlipCardProps) => {
+  const { toast } = useToast();
+  const [purchased, setPurchased] = useState(isPurchased);
+  const [isRevealing, setIsRevealing] = useState(false);
+
   const getRiskColor = () => {
     switch (risk) {
       case 'low': return 'bg-win-green/20 text-win-green border-win-green/50';
       case 'medium': return 'bg-accent/20 text-accent border-accent/50';
       case 'high': return 'bg-loss-red/20 text-loss-red border-loss-red/50';
     }
+  };
+
+  const handlePurchase = async () => {
+    setIsRevealing(true);
+    
+    // Confetti animation
+    const duration = 2000;
+    const end = Date.now() + duration;
+
+    const colors = ['#14b8a6', '#fbbf24', '#8b5cf6'];
+
+    (function frame() {
+      confetti({
+        particleCount: 3,
+        angle: 60,
+        spread: 55,
+        origin: { x: 0 },
+        colors: colors,
+      });
+      confetti({
+        particleCount: 3,
+        angle: 120,
+        spread: 55,
+        origin: { x: 1 },
+        colors: colors,
+      });
+
+      if (Date.now() < end) {
+        requestAnimationFrame(frame);
+      }
+    })();
+
+    // Wait for animation
+    setTimeout(() => {
+      setPurchased(true);
+      setIsRevealing(false);
+      toast({
+        title: "Slip Unlocked! 🎉",
+        description: "Your betting slip has been revealed",
+      });
+    }, 2000);
   };
 
   return (
@@ -67,20 +115,40 @@ export const SlipCard = ({
       </div>
 
       {/* Blurred Content */}
-      {!isPurchased && (
+      {!purchased && (
         <div className="relative my-4 p-6 bg-muted/30 rounded-lg backdrop-blur-sm border border-white/5">
           <div className="absolute inset-0 flex items-center justify-center z-10">
             <div className="text-center">
-              <Lock className="h-8 w-8 text-primary mx-auto mb-2" />
+              <Lock className={`h-8 w-8 text-primary mx-auto mb-2 ${isRevealing ? 'animate-pulse' : ''}`} />
               <p className="text-sm font-medium text-muted-foreground">
-                Locked - Purchase to Reveal
+                {isRevealing ? 'Unlocking...' : 'Locked - Purchase to Reveal'}
               </p>
             </div>
           </div>
-          <div className="blur-md select-none">
+          <div className={`select-none transition-all duration-1000 ${isRevealing ? 'blur-none' : 'blur-md'}`}>
             <div className="h-16 bg-card/50 rounded mb-2"></div>
             <div className="h-16 bg-card/50 rounded mb-2"></div>
             <div className="h-16 bg-card/50 rounded"></div>
+          </div>
+        </div>
+      )}
+
+      {/* Revealed Content */}
+      {purchased && (
+        <div className="my-4 p-6 bg-gradient-to-br from-primary/10 to-accent/10 rounded-lg border border-primary/30 animate-fade-in">
+          <div className="space-y-3">
+            <div className="p-3 rounded bg-card/50">
+              <p className="text-sm font-medium">Arsenal vs Chelsea</p>
+              <p className="text-xs text-muted-foreground">Over 2.5 Goals • 1.85</p>
+            </div>
+            <div className="p-3 rounded bg-card/50">
+              <p className="text-sm font-medium">Man City vs Liverpool</p>
+              <p className="text-xs text-muted-foreground">BTTS Yes • 1.90</p>
+            </div>
+            <div className="p-3 rounded bg-card/50">
+              <p className="text-sm font-medium">Real Madrid vs Barcelona</p>
+              <p className="text-xs text-muted-foreground">Home Win • 2.10</p>
+            </div>
           </div>
         </div>
       )}
@@ -111,9 +179,13 @@ export const SlipCard = ({
           <span>{watching} watching</span>
         </div>
         
-        <Button className="bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 gap-2 group-hover:scale-105 transition-transform">
-          <span className="font-bold">${price}</span>
-          <TrendingUp className="h-4 w-4" />
+        <Button 
+          onClick={handlePurchase}
+          disabled={purchased || isRevealing}
+          className="bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 gap-2 group-hover:scale-105 transition-transform disabled:opacity-50"
+        >
+          <span className="font-bold">{purchased ? 'PURCHASED' : `$${price}`}</span>
+          {!purchased && <TrendingUp className="h-4 w-4" />}
         </Button>
       </div>
     </Card>
