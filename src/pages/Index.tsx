@@ -1,9 +1,10 @@
 import { SlipCard } from '@/components/SlipCard';
 import { BrainScoreWidget } from '@/components/BrainScoreWidget';
+import { FreeBrainCarousel } from '@/components/FreeBrainCarousel';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Gift, TrendingUp, Flame, Star } from 'lucide-react';
+import { TrendingUp } from 'lucide-react';
 
 const Index = () => {
   const trendingSlips = [
@@ -47,37 +48,52 @@ const Index = () => {
 
   return (
     <div className="space-y-8">
-      {/* Free Daily Brain Banner */}
-      <Card className="relative overflow-hidden bg-gradient-to-r from-secondary to-secondary/80 p-8 border-secondary">
-        <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full blur-3xl" />
-        <div className="relative z-10 flex items-center justify-between">
-          <div className="flex-1">
-            <div className="flex items-center gap-2 mb-2">
-              <Gift className="h-6 w-6 text-gold" />
-              <Badge className="bg-gold/20 text-gold border-gold/50">
-                FREE DAILY
-              </Badge>
-            </div>
-            <h2 className="font-display text-3xl font-bold mb-2">
-              Today's Free Brain from Elite Tipster
-            </h2>
-            <p className="text-lg text-muted-foreground mb-4">
-              Sarah Johnson • 12-game win streak • 94% accuracy
-            </p>
-            <div className="flex items-center gap-4 text-sm">
-              <span className="flex items-center gap-1">
-                <Flame className="h-4 w-4 text-destructive" />
-                <span className="font-semibold">Drops in 2h 14m</span>
-              </span>
-              <span className="text-muted-foreground">Available at 11:00 AM EAT</span>
-            </div>
-          </div>
-          <Button size="lg" className="bg-gold text-black hover:bg-gold-glow gap-2 gold-glow">
-            <Star className="h-5 w-5" />
-            <span className="font-bold">Notify Me</span>
-          </Button>
-        </div>
-      </Card>
+      {/* Free Daily Brain Banner Carousel */}
+      <FreeBrainCarousel
+        slides={[
+          {
+            id: '1',
+            tipsterName: 'Sarah Johnson',
+            winStreak: 12,
+            accuracy: 94,
+            dropTime: '2h 14m',
+            availableTime: '11:00 AM EAT',
+            description: 'Today\'s Free Brain from Elite Tipster',
+            image: '/image1.png',
+            gradientFrom: 'from-purple-600',
+            gradientTo: 'to-purple-800',
+            badgeColor: 'bg-purple-500/20 text-purple-300 border-purple-500/50',
+          },
+          {
+            id: '2',
+            tipsterName: 'Alex Martinez',
+            winStreak: 8,
+            accuracy: 89,
+            dropTime: '1h 45m',
+            availableTime: '10:30 AM EAT',
+            description: 'Premium Betting Tips - Limited Time Offer',
+            image: '/image2.png',
+            gradientFrom: 'from-blue-600',
+            gradientTo: 'to-blue-800',
+            badgeColor: 'bg-blue-500/20 text-blue-300 border-blue-500/50',
+          },
+          {
+            id: '3',
+            tipsterName: 'Mike Chen',
+            winStreak: 15,
+            accuracy: 92,
+            dropTime: '3h 30m',
+            availableTime: '12:15 PM EAT',
+            description: 'Exclusive Predictions from Top Tipsters',
+            image: '/image3.png',
+            gradientFrom: 'from-orange-600',
+            gradientTo: 'to-orange-800',
+            badgeColor: 'bg-orange-500/20 text-orange-300 border-orange-500/50',
+          },
+        ]}
+        autoPlay={true}
+        autoPlayInterval={5000}
+      />
 
       {/* Main Content Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -126,7 +142,7 @@ const Index = () => {
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-sm text-muted-foreground">Total Profit</span>
-                <span className="font-bold text-gold">+$187.50</span>
+                <span className="font-bold text-gold">+TSH 187,500</span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-sm text-muted-foreground">Referrals</span>

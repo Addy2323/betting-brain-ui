@@ -14,7 +14,7 @@ const Referrals = () => {
       name: 'Bronze',
       icon: Trophy,
       required: 3,
-      reward: '$10 bonus',
+      reward: 'TSH 10,000 bonus',
       color: 'text-orange-400',
       bgColor: 'bg-orange-400/20',
       borderColor: 'border-orange-400/50',
@@ -24,7 +24,7 @@ const Referrals = () => {
       name: 'Silver',
       icon: Trophy,
       required: 10,
-      reward: '$30 bonus + 5% commission',
+      reward: 'TSH 30,000 bonus + 5% commission',
       color: 'text-gray-300',
       bgColor: 'bg-gray-300/20',
       borderColor: 'border-gray-300/50',
@@ -34,7 +34,7 @@ const Referrals = () => {
       name: 'Gold',
       icon: Star,
       required: 25,
-      reward: '$100 bonus + 10% commission',
+      reward: 'TSH 100,000 bonus + 10% commission',
       color: 'text-gold',
       bgColor: 'bg-gold/20',
       borderColor: 'border-gold/50',
@@ -44,7 +44,7 @@ const Referrals = () => {
       name: 'Diamond',
       icon: Star,
       required: 100,
-      reward: '$500 bonus + 15% lifetime commission',
+      reward: 'TSH 500,000 bonus + 15% lifetime commission',
       color: 'text-primary',
       bgColor: 'bg-primary/20',
       borderColor: 'border-primary/50',
@@ -189,7 +189,7 @@ const Referrals = () => {
         <h3 className="font-display text-lg font-bold mb-6">Your Referral Stats</h3>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <div className="text-center p-4 rounded-lg bg-muted/30">
-            <p className="text-2xl font-bold text-win-green">$47.50</p>
+            <p className="text-2xl font-bold text-win-green">TSH 47,500</p>
             <p className="text-sm text-muted-foreground mt-1">Total Earned</p>
           </div>
           <div className="text-center p-4 rounded-lg bg-muted/30">

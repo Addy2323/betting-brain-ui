@@ -71,6 +71,51 @@ All colors MUST be HSL.
     --sidebar-border: 222 30% 18%;
     --sidebar-ring: 178 90% 55%;
   }
+
+  /* Light mode */
+  .light {
+    --background: 0 0% 100%;
+    --foreground: 222 47% 8%;
+
+    --card: 0 0% 96%;
+    --card-foreground: 222 47% 8%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 8%;
+
+    --primary: 178 90% 45%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 262 52% 55%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 222 30% 88%;
+    --muted-foreground: 215 20% 35%;
+
+    --accent: 45 100% 50%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 85% 55%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 222 30% 88%;
+    --input: 222 30% 88%;
+    --ring: 178 90% 45%;
+
+    --glass: 0 0% 100% / 0.7;
+    --glass-border: 222 47% 8% / 0.1;
+
+    --gradient-dark: linear-gradient(180deg, hsl(0, 0%, 100%), hsl(0, 0%, 96%));
+
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 222 47% 8%;
+    --sidebar-primary: 178 90% 45%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 0 0% 96%;
+    --sidebar-accent-foreground: 222 47% 8%;
+    --sidebar-border: 222 30% 88%;
+    --sidebar-ring: 178 90% 45%;
+  }
 }
 
 @layer base {
@@ -82,11 +127,19 @@ All colors MUST be HSL.
     @apply bg-background text-foreground font-sans antialiased;
     background: linear-gradient(180deg, hsl(222, 47%, 8%), hsl(222, 47%, 6%));
   }
+
+  .light body {
+    background: linear-gradient(180deg, hsl(0, 0%, 100%), hsl(0, 0%, 96%));
+  }
 }
 
 @layer utilities {
   .glass-card {
     @apply bg-card/60 backdrop-blur-xl border border-white/10;
+  }
+
+  .light .glass-card {
+    @apply border-black/10;
   }
   
   .gold-glow {

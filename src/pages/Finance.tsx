@@ -23,7 +23,7 @@ export default function Finance() {
             <p className="text-sm text-muted-foreground">Total Revenue</p>
             <DollarSign className="h-5 w-5 text-primary" />
           </div>
-          <p className="text-3xl font-bold text-primary">$45,230</p>
+          <p className="text-3xl font-bold text-primary">TSH 45,230,000</p>
           <div className="flex items-center gap-1 mt-2">
             <TrendingUp className="h-4 w-4 text-win-green" />
             <span className="text-xs text-win-green">+12.5% from last month</span>
@@ -35,7 +35,7 @@ export default function Finance() {
             <p className="text-sm text-muted-foreground">This Month</p>
             <DollarSign className="h-5 w-5 text-accent" />
           </div>
-          <p className="text-3xl font-bold text-accent">$12,890</p>
+          <p className="text-3xl font-bold text-accent">TSH 12,890,000</p>
           <div className="flex items-center gap-1 mt-2">
             <TrendingUp className="h-4 w-4 text-win-green" />
             <span className="text-xs text-win-green">+8.3% from last week</span>
@@ -47,7 +47,7 @@ export default function Finance() {
             <p className="text-sm text-muted-foreground">Pending Payouts</p>
             <DollarSign className="h-5 w-5 text-gold" />
           </div>
-          <p className="text-3xl font-bold text-gold">$8,450</p>
+          <p className="text-3xl font-bold text-gold">TSH 8,450,000</p>
           <p className="text-xs text-muted-foreground mt-2">45 pending requests</p>
         </Card>
 
@@ -56,7 +56,7 @@ export default function Finance() {
             <p className="text-sm text-muted-foreground">Platform Fee</p>
             <DollarSign className="h-5 w-5 text-win-green" />
           </div>
-          <p className="text-3xl font-bold text-win-green">$5,670</p>
+          <p className="text-3xl font-bold text-win-green">TSH 5,670,000</p>
           <p className="text-xs text-muted-foreground mt-2">30% commission</p>
         </Card>
       </div>
@@ -78,7 +78,7 @@ export default function Finance() {
                   <p className="font-medium">Slip Sales</p>
                   <p className="text-sm text-muted-foreground">1,234 slips sold</p>
                 </div>
-                <p className="text-xl font-bold text-primary">$38,560</p>
+                <p className="text-xl font-bold text-primary">TSH 38,560,000</p>
               </div>
               
               <div className="flex items-center justify-between p-4 rounded-lg bg-muted/30">
@@ -86,7 +86,7 @@ export default function Finance() {
                   <p className="font-medium">Subscription Fees</p>
                   <p className="text-sm text-muted-foreground">567 active subs</p>
                 </div>
-                <p className="text-xl font-bold text-accent">$4,250</p>
+                <p className="text-xl font-bold text-accent">TSH 4,250,000</p>
               </div>
               
               <div className="flex items-center justify-between p-4 rounded-lg bg-muted/30">
@@ -94,7 +94,7 @@ export default function Finance() {
                   <p className="font-medium">Premium Features</p>
                   <p className="text-sm text-muted-foreground">89 users</p>
                 </div>
-                <p className="text-xl font-bold text-gold">$2,420</p>
+                <p className="text-xl font-bold text-gold">TSH 2,420,000</p>
               </div>
             </div>
           </Card>

@@ -184,7 +184,7 @@ export const SlipCard = ({
           disabled={purchased || isRevealing}
           className="bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 gap-2 group-hover:scale-105 transition-transform disabled:opacity-50"
         >
-          <span className="font-bold">{purchased ? 'PURCHASED' : `$${price}`}</span>
+          <span className="font-bold">{purchased ? 'PURCHASED' : `TSH ${(price * 1000).toFixed(0)}`}</span>
           {!purchased && <TrendingUp className="h-4 w-4" />}
         </Button>
       </div>

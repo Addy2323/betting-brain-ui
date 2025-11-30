@@ -54,7 +54,7 @@ export default function Withdrawals() {
             </div>
             <Clock className="h-8 w-8 text-accent" />
           </div>
-          <p className="text-xs text-muted-foreground mt-2">Total: $730</p>
+          <p className="text-xs text-muted-foreground mt-2">Total: TSH 730,000</p>
         </Card>
 
         <Card className="glass-card p-4">
@@ -65,7 +65,7 @@ export default function Withdrawals() {
             </div>
             <CheckCircle className="h-8 w-8 text-win-green" />
           </div>
-          <p className="text-xs text-muted-foreground mt-2">Total: $3,450</p>
+          <p className="text-xs text-muted-foreground mt-2">Total: TSH 3,450,000</p>
         </Card>
 
         <Card className="glass-card p-4">
@@ -83,7 +83,7 @@ export default function Withdrawals() {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-muted-foreground">This Month</p>
-              <p className="text-2xl font-bold text-primary">$45,230</p>
+              <p className="text-2xl font-bold text-primary">TSH 45,230,000</p>
             </div>
             <DollarSign className="h-8 w-8 text-primary" />
           </div>
@@ -120,7 +120,7 @@ export default function Withdrawals() {
                   </div>
 
                   <div className="text-right">
-                    <p className="text-2xl font-bold text-primary">${withdrawal.amount}</p>
+                    <p className="text-2xl font-bold text-primary">TSH {withdrawal.amount * 1000}</p>
                     <Badge variant="outline" className="mt-2 bg-accent/20 text-accent border-accent/50">
                       PENDING
                     </Badge>

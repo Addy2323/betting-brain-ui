@@ -6,8 +6,14 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ArrowDown, ArrowUp, Clock, CheckCircle2, XCircle } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
+import { PaymentMethods } from '@/components/PaymentMethods';
+
+import { useState } from 'react';
 
 const Wallet = () => {
+  const [selectedDepositMethod, setSelectedDepositMethod] = useState<string | null>(null);
+  const [selectedWithdrawMethod, setSelectedWithdrawMethod] = useState<string | null>(null);
+
   const transactions = [
     { id: 1, type: 'deposit', amount: 50, status: 'completed', date: '2024-01-15', method: 'M-Pesa' },
     { id: 2, type: 'purchase', amount: -9.99, status: 'completed', date: '2024-01-14', method: 'Wallet' },
@@ -32,7 +38,7 @@ const Wallet = () => {
           <div>
             <p className="text-sm text-muted-foreground mb-2">Available Balance</p>
             <h2 className="font-display text-5xl font-bold text-gradient-gold">
-              $247.50
+              TSH 247,500
             </h2>
           </div>
           
@@ -55,11 +61,11 @@ const Wallet = () => {
         <div className="space-y-3">
           <div className="flex items-center justify-between text-sm">
             <span className="text-muted-foreground">Used this month</span>
-            <span className="font-bold">${currentWithdrawn} / ${withdrawalLimit}</span>
+            <span className="font-bold">TSH {currentWithdrawn * 1000} / TSH {withdrawalLimit * 1000}</span>
           </div>
           <Progress value={withdrawalProgress} className="h-3" />
           <p className="text-xs text-muted-foreground">
-            ${withdrawalLimit - currentWithdrawn} remaining for this billing cycle
+            TSH {(withdrawalLimit - currentWithdrawn) * 1000} remaining for this billing cycle
           </p>
         </div>
       </Card>
@@ -76,7 +82,7 @@ const Wallet = () => {
             <h3 className="font-display text-lg font-bold mb-6">Add Funds</h3>
             <div className="space-y-4">
               <div>
-                <Label htmlFor="deposit-amount">Amount (USD)</Label>
+                <Label htmlFor="deposit-amount">Amount (TSH)</Label>
                 <Input
                   id="deposit-amount"
                   type="number"
@@ -87,20 +93,100 @@ const Wallet = () => {
               
               <div>
                 <Label>Payment Method</Label>
-                <div className="grid grid-cols-2 gap-3 mt-2">
-                  <Button variant="outline" className="h-auto p-4 flex flex-col gap-2">
-                    <span className="font-bold text-win-green">M-Pesa</span>
-                    <span className="text-xs text-muted-foreground">Instant</span>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-2">
+                  <Button 
+                    onClick={() => setSelectedDepositMethod('mpesa')}
+                    className={`h-auto p-4 flex flex-col gap-3 transition-all ${
+                      selectedDepositMethod === 'mpesa'
+                        ? 'border-2 border-primary bg-primary/10'
+                        : 'border border-border hover:border-primary'
+                    }`}
+                    variant="outline"
+                  >
+                    <img src="/mpesa.png" alt="M-Pesa" className="h-8 w-auto" />
+                    <div>
+                      <span className="font-bold text-win-green block text-xs">M-Pesa</span>
+                      <span className="text-xs text-muted-foreground">Instant</span>
+                    </div>
+                    {selectedDepositMethod === 'mpesa' && (
+                      <Badge className="mt-2 bg-primary text-primary-foreground">Selected</Badge>
+                    )}
                   </Button>
-                  <Button variant="outline" className="h-auto p-4 flex flex-col gap-2">
-                    <span className="font-bold">Bank Card</span>
-                    <span className="text-xs text-muted-foreground">2-5 mins</span>
+                  <Button 
+                    onClick={() => setSelectedDepositMethod('airtel')}
+                    className={`h-auto p-4 flex flex-col gap-3 transition-all ${
+                      selectedDepositMethod === 'airtel'
+                        ? 'border-2 border-primary bg-primary/10'
+                        : 'border border-border hover:border-primary'
+                    }`}
+                    variant="outline"
+                  >
+                    <img src="/airtelmoney.png" alt="Airtel Money" className="h-8 w-auto" />
+                    <div>
+                      <span className="font-bold block text-xs">Airtel Money</span>
+                      <span className="text-xs text-muted-foreground">5-15 mins</span>
+                    </div>
+                    {selectedDepositMethod === 'airtel' && (
+                      <Badge className="mt-2 bg-primary text-primary-foreground">Selected</Badge>
+                    )}
+                  </Button>
+                  <Button 
+                    onClick={() => setSelectedDepositMethod('bank')}
+                    className={`h-auto p-4 flex flex-col gap-3 transition-all ${
+                      selectedDepositMethod === 'bank'
+                        ? 'border-2 border-primary bg-primary/10'
+                        : 'border border-border hover:border-primary'
+                    }`}
+                    variant="outline"
+                  >
+                    <img src="/bank.png" alt="Bank" className="h-8 w-auto" />
+                    <div>
+                      <span className="font-bold block text-xs">Bank Transfer</span>
+                      <span className="text-xs text-muted-foreground">1-2 hours</span>
+                    </div>
+                    {selectedDepositMethod === 'bank' && (
+                      <Badge className="mt-2 bg-primary text-primary-foreground">Selected</Badge>
+                    )}
+                  </Button>
+                  <Button 
+                    onClick={() => setSelectedDepositMethod('halopesa')}
+                    className={`h-auto p-4 flex flex-col gap-3 transition-all ${
+                      selectedDepositMethod === 'halopesa'
+                        ? 'border-2 border-primary bg-primary/10'
+                        : 'border border-border hover:border-primary'
+                    }`}
+                    variant="outline"
+                  >
+                    <img src="/halopesa.png" alt="Halopesa" className="h-8 w-auto" />
+                    <div>
+                      <span className="font-bold block text-xs">Halopesa</span>
+                      <span className="text-xs text-muted-foreground">5-15 mins</span>
+                    </div>
+                    {selectedDepositMethod === 'halopesa' && (
+                      <Badge className="mt-2 bg-primary text-primary-foreground">Selected</Badge>
+                    )}
                   </Button>
                 </div>
               </div>
 
-              <Button className="w-full bg-win-green hover:bg-win-green/90" size="lg">
-                Continue with M-Pesa
+              <Button 
+                className={`w-full transition-all ${
+                  selectedDepositMethod
+                    ? 'bg-win-green hover:bg-win-green/90'
+                    : 'bg-muted text-muted-foreground cursor-not-allowed'
+                }`}
+                size="lg"
+                disabled={!selectedDepositMethod}
+              >
+                {selectedDepositMethod 
+                  ? `Continue with ${
+                      selectedDepositMethod === 'mpesa' ? 'M-Pesa' :
+                      selectedDepositMethod === 'airtel' ? 'Airtel Money' :
+                      selectedDepositMethod === 'bank' ? 'Bank Transfer' :
+                      'Halopesa'
+                    }`
+                  : 'Select a payment method'
+                }
               </Button>
             </div>
           </Card>
@@ -111,7 +197,7 @@ const Wallet = () => {
             <h3 className="font-display text-lg font-bold mb-6">Withdraw Funds</h3>
             <div className="space-y-4">
               <div>
-                <Label htmlFor="withdraw-amount">Amount (USD)</Label>
+                <Label htmlFor="withdraw-amount">Amount (TSH)</Label>
                 <Input
                   id="withdraw-amount"
                   type="number"
@@ -130,10 +216,88 @@ const Wallet = () => {
                 />
               </div>
 
+              <div>
+                <Label>Withdrawal Method</Label>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-2">
+                  <Button 
+                    onClick={() => setSelectedWithdrawMethod('mpesa')}
+                    className={`h-auto p-4 flex flex-col gap-3 transition-all ${
+                      selectedWithdrawMethod === 'mpesa'
+                        ? 'border-2 border-primary bg-primary/10'
+                        : 'border border-border hover:border-primary'
+                    }`}
+                    variant="outline"
+                  >
+                    <img src="/mpesa.png" alt="M-Pesa" className="h-8 w-auto" />
+                    <div>
+                      <span className="font-bold text-win-green block text-xs">M-Pesa</span>
+                      <span className="text-xs text-muted-foreground">5-15 mins</span>
+                    </div>
+                    {selectedWithdrawMethod === 'mpesa' && (
+                      <Badge className="mt-2 bg-primary text-primary-foreground">Selected</Badge>
+                    )}
+                  </Button>
+                  <Button 
+                    onClick={() => setSelectedWithdrawMethod('airtel')}
+                    className={`h-auto p-4 flex flex-col gap-3 transition-all ${
+                      selectedWithdrawMethod === 'airtel'
+                        ? 'border-2 border-primary bg-primary/10'
+                        : 'border border-border hover:border-primary'
+                    }`}
+                    variant="outline"
+                  >
+                    <img src="/airtelmoney.png" alt="Airtel Money" className="h-8 w-auto" />
+                    <div>
+                      <span className="font-bold block text-xs">Airtel Money</span>
+                      <span className="text-xs text-muted-foreground">5-15 mins</span>
+                    </div>
+                    {selectedWithdrawMethod === 'airtel' && (
+                      <Badge className="mt-2 bg-primary text-primary-foreground">Selected</Badge>
+                    )}
+                  </Button>
+                  <Button 
+                    onClick={() => setSelectedWithdrawMethod('bank')}
+                    className={`h-auto p-4 flex flex-col gap-3 transition-all ${
+                      selectedWithdrawMethod === 'bank'
+                        ? 'border-2 border-primary bg-primary/10'
+                        : 'border border-border hover:border-primary'
+                    }`}
+                    variant="outline"
+                  >
+                    <img src="/bank.png" alt="Bank" className="h-8 w-auto" />
+                    <div>
+                      <span className="font-bold block text-xs">Bank Transfer</span>
+                      <span className="text-xs text-muted-foreground">1-2 hours</span>
+                    </div>
+                    {selectedWithdrawMethod === 'bank' && (
+                      <Badge className="mt-2 bg-primary text-primary-foreground">Selected</Badge>
+                    )}
+                  </Button>
+                  <Button 
+                    onClick={() => setSelectedWithdrawMethod('halopesa')}
+                    className={`h-auto p-4 flex flex-col gap-3 transition-all ${
+                      selectedWithdrawMethod === 'halopesa'
+                        ? 'border-2 border-primary bg-primary/10'
+                        : 'border border-border hover:border-primary'
+                    }`}
+                    variant="outline"
+                  >
+                    <img src="/halopesa.png" alt="Halopesa" className="h-8 w-auto" />
+                    <div>
+                      <span className="font-bold block text-xs">Halopesa</span>
+                      <span className="text-xs text-muted-foreground">5-15 mins</span>
+                    </div>
+                    {selectedWithdrawMethod === 'halopesa' && (
+                      <Badge className="mt-2 bg-primary text-primary-foreground">Selected</Badge>
+                    )}
+                  </Button>
+                </div>
+              </div>
+
               <div className="bg-muted/30 p-4 rounded-lg space-y-2 text-sm">
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Withdrawal Fee</span>
-                  <span className="font-medium">$0.50</span>
+                  <span className="font-medium">TSH 500</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Processing Time</span>
@@ -141,8 +305,24 @@ const Wallet = () => {
                 </div>
               </div>
 
-              <Button className="w-full" size="lg">
-                Request Withdrawal
+              <Button 
+                className={`w-full transition-all ${
+                  selectedWithdrawMethod
+                    ? 'bg-primary hover:bg-primary/90'
+                    : 'bg-muted text-muted-foreground cursor-not-allowed'
+                }`}
+                size="lg"
+                disabled={!selectedWithdrawMethod}
+              >
+                {selectedWithdrawMethod 
+                  ? `Request Withdrawal via ${
+                      selectedWithdrawMethod === 'mpesa' ? 'M-Pesa' :
+                      selectedWithdrawMethod === 'airtel' ? 'Airtel Money' :
+                      selectedWithdrawMethod === 'bank' ? 'Bank Transfer' :
+                      'Halopesa'
+                    }`
+                  : 'Select a withdrawal method'
+                }
               </Button>
             </div>
           </Card>
@@ -190,7 +370,7 @@ const Wallet = () => {
                     tx.amount > 0 ? 'text-win-green' : 'text-foreground'
                   }`}
                 >
-                  {tx.amount > 0 ? '+' : ''}${Math.abs(tx.amount).toFixed(2)}
+                  {tx.amount > 0 ? '+' : ''}TSH {(Math.abs(tx.amount) * 1000).toFixed(0)}
                 </span>
                 {tx.status === 'completed' ? (
                   <CheckCircle2 className="h-5 w-5 text-win-green" />
@@ -204,6 +384,9 @@ const Wallet = () => {
           ))}
         </div>
       </Card>
+
+      {/* Payment Methods */}
+      <PaymentMethods className="mt-8" />
     </div>
   );
 };
