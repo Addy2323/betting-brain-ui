@@ -2,11 +2,12 @@ import {
   Home, TrendingUp, ShoppingBag, Wallet, Users, 
   Gift, Brain, FileText, DollarSign, Award, 
   UserCheck, BarChart3, AlertTriangle, Flag,
-  Shield, Settings, Lock
+  Shield, Settings, Lock, LogOut
 } from 'lucide-react';
 import { NavLink } from '@/components/NavLink';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useRole } from '@/components/RoleProvider';
+import { Button } from '@/components/ui/button';
 import {
   Sidebar,
   SidebarContent,
@@ -16,6 +17,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarFooter,
   useSidebar,
 } from '@/components/ui/sidebar';
 import {
@@ -60,8 +62,14 @@ const superAdminNavItems = [
 export function AppSidebar() {
   const { state } = useSidebar();
   const location = useLocation();
+  const navigate = useNavigate();
   const { role, setRole } = useRole();
   const isCollapsed = state === 'collapsed';
+
+  const handleLogout = () => {
+    // Clear user data/session here if needed
+    navigate('/auth');
+  };
 
   const getNavItems = () => {
     let items = [...userNavItems];
@@ -134,6 +142,17 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+      
+      <SidebarFooter>
+        <Button
+          onClick={handleLogout}
+          variant="destructive"
+          className="w-full gap-2 justify-center"
+        >
+          <LogOut className="h-4 w-4" />
+          {!isCollapsed && <span>Logout</span>}
+        </Button>
+      </SidebarFooter>
     </Sidebar>
   );
 }
