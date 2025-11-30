@@ -2,11 +2,12 @@ import {
   Home, TrendingUp, ShoppingBag, Wallet, Users, 
   Gift, Brain, FileText, DollarSign, Award, 
   UserCheck, BarChart3, AlertTriangle, Flag,
-  Shield, Settings, Lock, LogOut
+  Shield, Settings, Lock, LogOut, LayoutDashboard
 } from 'lucide-react';
 import { NavLink } from '@/components/NavLink';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useRole } from '@/components/RoleProvider';
+import { useAuth } from '@/context/AuthContext';
 import { Button } from '@/components/ui/button';
 import {
   Sidebar,
@@ -20,13 +21,6 @@ import {
   SidebarFooter,
   useSidebar,
 } from '@/components/ui/sidebar';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 
 const userNavItems = [
   { title: 'Home', url: '/', icon: Home },
@@ -64,29 +58,48 @@ export function AppSidebar() {
   const location = useLocation();
   const navigate = useNavigate();
   const { role, setRole } = useRole();
+  const { user, logout } = useAuth();
   const isCollapsed = state === 'collapsed';
 
   const handleLogout = () => {
-    // Clear user data/session here if needed
-    navigate('/auth');
+    logout();
+    navigate('/');
+  };
+
+  const getDashboardRoute = () => {
+    switch (user?.role) {
+      case 'tipster':
+        return '/tipster-dashboard';
+      case 'admin':
+        return '/admin-dashboard';
+      case 'super_admin':
+        return '/super-admin-dashboard';
+      default:
+        return '/user-dashboard';
+    }
   };
 
   const getNavItems = () => {
-    let items = [...userNavItems];
+    // Use user's actual role from AuthContext
+    const userRole = user?.role || 'user';
     
-    if (role === 'tipster' || role === 'admin' || role === 'super_admin') {
-      items = [...items, ...tipsterNavItems];
+    switch (userRole) {
+      case 'tipster':
+        // Tipster sees ONLY tipster items
+        return tipsterNavItems;
+      
+      case 'admin':
+        // Admin sees ONLY admin items
+        return adminNavItems;
+      
+      case 'super_admin':
+        // Super Admin sees ONLY super admin items
+        return superAdminNavItems;
+      
+      default:
+        // Regular user sees only user items
+        return userNavItems;
     }
-    
-    if (role === 'admin' || role === 'super_admin') {
-      items = [...items, ...adminNavItems];
-    }
-    
-    if (role === 'super_admin') {
-      items = [...items, ...superAdminNavItems];
-    }
-    
-    return items;
   };
 
   const navItems = getNavItems();
@@ -95,18 +108,16 @@ export function AppSidebar() {
     <Sidebar className={isCollapsed ? 'w-16' : 'w-64'} collapsible="icon">
       <SidebarContent>
         {!isCollapsed && (
-          <div className="p-4">
-            <Select value={role} onValueChange={(value) => setRole(value as any)}>
-              <SelectTrigger className="w-full">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="user">User</SelectItem>
-                <SelectItem value="tipster">Tipster</SelectItem>
-                <SelectItem value="admin">Admin</SelectItem>
-                <SelectItem value="super_admin">Super Admin</SelectItem>
-              </SelectContent>
-            </Select>
+          <div className="p-4 space-y-4">
+            {/* User Info */}
+            <div className="bg-slate-800/50 rounded-lg p-3 border border-primary/20">
+              <p className="text-xs text-muted-foreground mb-1">Logged in as</p>
+              <p className="text-sm font-semibold text-primary">{user?.fullName}</p>
+              <p className="text-xs text-muted-foreground capitalize">
+                {user?.role === 'super_admin' ? 'Super Admin' : user?.role}
+              </p>
+            </div>
+
           </div>
         )}
 
@@ -116,6 +127,26 @@ export function AppSidebar() {
           </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
+              {/* Dashboard Link */}
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <NavLink
+                    to={getDashboardRoute()}
+                    className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-all ${
+                      location.pathname === getDashboardRoute()
+                        ? 'bg-primary text-primary-foreground'
+                        : 'hover:bg-muted'
+                    }`}
+                  >
+                    <LayoutDashboard className="h-5 w-5 flex-shrink-0" />
+                    {!isCollapsed && (
+                      <span className="font-medium">Dashboard</span>
+                    )}
+                  </NavLink>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+
+              {/* Other Navigation Items */}
               {navItems.map((item) => {
                 const isActive = location.pathname === item.url;
                 return (

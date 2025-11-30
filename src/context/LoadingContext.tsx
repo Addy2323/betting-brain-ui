@@ -10,11 +10,11 @@ const LoadingContext = createContext<LoadingContextType | undefined>(undefined);
 export const LoadingProvider = ({ children }: { children: ReactNode }) => {
   const [isLoading, setIsLoading] = useState(true);
 
-  // Auto-hide loading after 7 seconds on startup
+  // Auto-hide loading after 500ms on startup (reduced from 7000ms)
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 7000);
+    }, 500);
     return () => clearTimeout(timer);
   }, []);
 
