@@ -25,7 +25,6 @@ import Reports from "./pages/Reports";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
 import Unauthorized from "./pages/Unauthorized";
-import UserDashboard from "./pages/UserDashboard";
 import TipsterDashboard from "./pages/TipsterDashboard";
 import AdminDashboard from "./pages/AdminDashboard";
 import SuperAdminDashboard from "./pages/SuperAdminDashboard";
@@ -50,7 +49,7 @@ const App = () => (
                   
                   {/* Protected Routes */}
                   <Route
-                    path="/home"
+                    path="/index"
                     element={
                       <ProtectedRoute>
                         <Layout />
@@ -58,18 +57,6 @@ const App = () => (
                     }
                   >
                     <Route index element={<Index />} />
-                  </Route>
-
-                  {/* Role-Based Dashboards */}
-                  <Route
-                    path="/user-dashboard"
-                    element={
-                      <ProtectedRoute allowedRoles={['user']}>
-                        <Layout />
-                      </ProtectedRoute>
-                    }
-                  >
-                    <Route index element={<UserDashboard />} />
                   </Route>
 
                   <Route

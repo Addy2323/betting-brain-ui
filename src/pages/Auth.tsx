@@ -50,7 +50,7 @@ const Auth = () => {
       case 'super_admin':
         return '/super-admin-dashboard';
       default:
-        return '/user-dashboard';
+        return '/index';
     }
   };
 

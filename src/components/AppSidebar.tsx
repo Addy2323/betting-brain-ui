@@ -2,7 +2,7 @@ import {
   Home, TrendingUp, ShoppingBag, Wallet, Users, 
   Gift, Brain, FileText, DollarSign, Award, 
   UserCheck, BarChart3, AlertTriangle, Flag,
-  Shield, Settings, Lock, LogOut, LayoutDashboard
+  Shield, Settings, Lock, LogOut
 } from 'lucide-react';
 import { NavLink } from '@/components/NavLink';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -23,7 +23,7 @@ import {
 } from '@/components/ui/sidebar';
 
 const userNavItems = [
-  { title: 'Home', url: '/', icon: Home },
+  { title: 'Home', url: '/index', icon: Home },
   { title: 'Trending Slips', url: '/trending', icon: TrendingUp },
   { title: 'Purchased Slips', url: '/purchased', icon: ShoppingBag },
   { title: 'Wallet', url: '/wallet', icon: Wallet },
@@ -66,18 +66,6 @@ export function AppSidebar() {
     navigate('/');
   };
 
-  const getDashboardRoute = () => {
-    switch (user?.role) {
-      case 'tipster':
-        return '/tipster-dashboard';
-      case 'admin':
-        return '/admin-dashboard';
-      case 'super_admin':
-        return '/super-admin-dashboard';
-      default:
-        return '/user-dashboard';
-    }
-  };
 
   const getNavItems = () => {
     // Use user's actual role from AuthContext
@@ -127,25 +115,6 @@ export function AppSidebar() {
           </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {/* Dashboard Link */}
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild>
-                  <NavLink
-                    to={getDashboardRoute()}
-                    className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-all ${
-                      location.pathname === getDashboardRoute()
-                        ? 'bg-primary text-primary-foreground'
-                        : 'hover:bg-muted'
-                    }`}
-                  >
-                    <LayoutDashboard className="h-5 w-5 flex-shrink-0" />
-                    {!isCollapsed && (
-                      <span className="font-medium">Dashboard</span>
-                    )}
-                  </NavLink>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-
               {/* Other Navigation Items */}
               {navItems.map((item) => {
                 const isActive = location.pathname === item.url;

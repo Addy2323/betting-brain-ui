@@ -57,7 +57,7 @@ export default function UserDashboard() {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <Card className="glass-card p-6 border-primary/20">
           <div className="text-sm text-muted-foreground mb-2">Account Balance</div>
-          <div className="text-2xl font-bold text-gradient-primary">$0.00</div>
+          <div className="text-2xl font-bold text-gradient-primary">Tsh0.00</div>
         </Card>
         <Card className="glass-card p-6 border-primary/20">
           <div className="text-sm text-muted-foreground mb-2">Slips Purchased</div>
@@ -69,7 +69,7 @@ export default function UserDashboard() {
         </Card>
         <Card className="glass-card p-6 border-primary/20">
           <div className="text-sm text-muted-foreground mb-2">Referral Bonus</div>
-          <div className="text-2xl font-bold text-gradient-primary">$0.00</div>
+          <div className="text-2xl font-bold text-gradient-primary">Tsh0.00</div>
         </Card>
       </div>
 
