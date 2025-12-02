@@ -4,11 +4,23 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Shield, Lock, Settings, TrendingUp, Users, AlertCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useLocalStorage } from '@/hooks/useLocalStorage';
+import { DASHBOARD_METRICS } from '@/config/mockData';
 
 export default function SuperAdminDashboard() {
   usePageLoading();
   const { user } = useAuth();
   const navigate = useNavigate();
+
+  // Load metrics from localStorage
+  const [totalUsers] = useLocalStorage('superAdminTotalUsers', DASHBOARD_METRICS.superAdmin.totalUsers);
+  const [systemUptime] = useLocalStorage('superAdminSystemUptime', DASHBOARD_METRICS.superAdmin.systemUptime);
+  const [totalRevenue] = useLocalStorage('superAdminTotalRevenue', DASHBOARD_METRICS.superAdmin.totalRevenue);
+  const [securityAlerts] = useLocalStorage('superAdminSecurityAlerts', DASHBOARD_METRICS.superAdmin.securityAlerts);
+  const [regularUsers] = useLocalStorage('superAdminRegularUsers', DASHBOARD_METRICS.superAdmin.regularUsers);
+  const [tipsters] = useLocalStorage('superAdminTipsters', DASHBOARD_METRICS.superAdmin.tipsters);
+  const [admins] = useLocalStorage('superAdminAdmins', DASHBOARD_METRICS.superAdmin.admins);
+  const [superAdmins] = useLocalStorage('superAdminSuperAdmins', DASHBOARD_METRICS.superAdmin.superAdmins);
 
   const quickActions = [
     {
@@ -50,22 +62,22 @@ export default function SuperAdminDashboard() {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <Card className="glass-card p-6 border-primary/20">
           <div className="text-sm text-muted-foreground mb-2">Total Users</div>
-          <div className="text-2xl font-bold text-gradient-primary">0</div>
+          <div className="text-2xl font-bold text-gradient-primary">{totalUsers}</div>
           <div className="text-xs text-muted-foreground mt-2">All roles</div>
         </Card>
         <Card className="glass-card p-6 border-primary/20">
           <div className="text-sm text-muted-foreground mb-2">System Uptime</div>
-          <div className="text-2xl font-bold text-gradient-primary">99.9%</div>
+          <div className="text-2xl font-bold text-gradient-primary">{systemUptime}%</div>
           <div className="text-xs text-muted-foreground mt-2">Last 30 days</div>
         </Card>
         <Card className="glass-card p-6 border-primary/20">
           <div className="text-sm text-muted-foreground mb-2">Total Revenue</div>
-          <div className="text-2xl font-bold text-gradient-primary">$0.00</div>
+          <div className="text-2xl font-bold text-gradient-primary">TSH {totalRevenue.toLocaleString()}</div>
           <div className="text-xs text-muted-foreground mt-2">All time</div>
         </Card>
         <Card className="glass-card p-6 border-primary/20">
           <div className="text-sm text-muted-foreground mb-2">Security Alerts</div>
-          <div className="text-2xl font-bold text-gradient-primary">0</div>
+          <div className="text-2xl font-bold text-gradient-primary">{securityAlerts}</div>
           <div className="text-xs text-muted-foreground mt-2">Active</div>
         </Card>
       </div>
@@ -144,19 +156,19 @@ export default function SuperAdminDashboard() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <div className="bg-slate-800/50 p-4 rounded-lg">
             <div className="text-sm text-muted-foreground mb-2">Regular Users</div>
-            <div className="text-xl font-bold">0</div>
+            <div className="text-xl font-bold">{regularUsers}</div>
           </div>
           <div className="bg-slate-800/50 p-4 rounded-lg">
             <div className="text-sm text-muted-foreground mb-2">Tipsters</div>
-            <div className="text-xl font-bold">0</div>
+            <div className="text-xl font-bold">{tipsters}</div>
           </div>
           <div className="bg-slate-800/50 p-4 rounded-lg">
             <div className="text-sm text-muted-foreground mb-2">Admins</div>
-            <div className="text-xl font-bold">0</div>
+            <div className="text-xl font-bold">{admins}</div>
           </div>
           <div className="bg-slate-800/50 p-4 rounded-lg">
             <div className="text-sm text-muted-foreground mb-2">Super Admins</div>
-            <div className="text-xl font-bold">1</div>
+            <div className="text-xl font-bold">{superAdmins}</div>
           </div>
         </div>
       </Card>

@@ -7,6 +7,8 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
+import { useLocalStorage } from '@/hooks/useLocalStorage';
+import { STORAGE_KEYS } from '@/lib/storageKeys';
 
 interface Pick {
   id: string;
@@ -15,11 +17,29 @@ interface Pick {
   odds: string;
 }
 
+interface DraftSlip {
+  league: string;
+  risk: string;
+  price: string;
+  bookmaker: string;
+  description: string;
+  picks: Pick[];
+}
+
 export default function CreateSlip() {
   const { toast } = useToast();
-  const [picks, setPicks] = useState<Pick[]>([
-    { id: '1', match: '', pick: '', odds: '' }
-  ]);
+  
+  // Load draft from localStorage
+  const [draftSlip, setDraftSlip] = useLocalStorage<DraftSlip>(STORAGE_KEYS.DRAFT_SLIP, {
+    league: '',
+    risk: '',
+    price: '',
+    bookmaker: '',
+    description: '',
+    picks: [{ id: '1', match: '', pick: '', odds: '' }],
+  });
+
+  const [picks, setPicks] = useState<Pick[]>(draftSlip.picks);
 
   const addPick = () => {
     setPicks([...picks, { id: Date.now().toString(), match: '', pick: '', odds: '' }]);
@@ -31,8 +51,32 @@ export default function CreateSlip() {
     }
   };
 
+  const handleSaveDraft = () => {
+    setDraftSlip({
+      league: draftSlip.league,
+      risk: draftSlip.risk,
+      price: draftSlip.price,
+      bookmaker: draftSlip.bookmaker,
+      description: draftSlip.description,
+      picks,
+    });
+    toast({
+      title: "Draft Saved",
+      description: "Your slip draft has been saved to local storage",
+    });
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    // Clear draft after successful submission
+    setDraftSlip({
+      league: '',
+      risk: '',
+      price: '',
+      bookmaker: '',
+      description: '',
+      picks: [{ id: '1', match: '', pick: '', odds: '' }],
+    });
     toast({
       title: "Slip Created",
       description: "Your betting slip has been encrypted and published",
@@ -181,7 +225,7 @@ export default function CreateSlip() {
 
         {/* Submit */}
         <div className="flex gap-4">
-          <Button type="button" variant="outline" className="flex-1">
+          <Button type="button" variant="outline" className="flex-1" onClick={handleSaveDraft}>
             Save as Draft
           </Button>
           <Button type="submit" className="flex-1 bg-gradient-to-r from-primary to-accent">

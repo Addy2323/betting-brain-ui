@@ -4,11 +4,19 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { UserCheck, BarChart3, DollarSign, AlertTriangle, Flag, TrendingUp } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useLocalStorage } from '@/hooks/useLocalStorage';
+import { DASHBOARD_METRICS } from '@/config/mockData';
 
 export default function AdminDashboard() {
   usePageLoading();
   const { user } = useAuth();
   const navigate = useNavigate();
+
+  // Load metrics from localStorage
+  const [totalUsers] = useLocalStorage('adminTotalUsers', DASHBOARD_METRICS.admin.totalUsers);
+  const [pendingVerifications] = useLocalStorage('adminPendingVerifications', DASHBOARD_METRICS.admin.pendingVerifications);
+  const [platformRevenue] = useLocalStorage('adminPlatformRevenue', DASHBOARD_METRICS.admin.platformRevenue);
+  const [openDisputes] = useLocalStorage('adminOpenDisputes', DASHBOARD_METRICS.admin.openDisputes);
 
   const quickActions = [
     {
@@ -57,22 +65,22 @@ export default function AdminDashboard() {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <Card className="glass-card p-6 border-primary/20">
           <div className="text-sm text-muted-foreground mb-2">Total Users</div>
-          <div className="text-2xl font-bold text-gradient-primary">0</div>
+          <div className="text-2xl font-bold text-gradient-primary">{totalUsers}</div>
           <div className="text-xs text-muted-foreground mt-2">Active accounts</div>
         </Card>
         <Card className="glass-card p-6 border-primary/20">
           <div className="text-sm text-muted-foreground mb-2">Pending Verifications</div>
-          <div className="text-2xl font-bold text-gradient-primary">0</div>
+          <div className="text-2xl font-bold text-gradient-primary">{pendingVerifications}</div>
           <div className="text-xs text-muted-foreground mt-2">Tipsters</div>
         </Card>
         <Card className="glass-card p-6 border-primary/20">
           <div className="text-sm text-muted-foreground mb-2">Platform Revenue</div>
-          <div className="text-2xl font-bold text-gradient-primary">$0.00</div>
+          <div className="text-2xl font-bold text-gradient-primary">TSH {platformRevenue.toLocaleString()}</div>
           <div className="text-xs text-muted-foreground mt-2">This month</div>
         </Card>
         <Card className="glass-card p-6 border-primary/20">
           <div className="text-sm text-muted-foreground mb-2">Open Disputes</div>
-          <div className="text-2xl font-bold text-gradient-primary">0</div>
+          <div className="text-2xl font-bold text-gradient-primary">{openDisputes}</div>
           <div className="text-xs text-muted-foreground mt-2">Unresolved</div>
         </Card>
       </div>

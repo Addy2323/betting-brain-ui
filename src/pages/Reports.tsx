@@ -4,31 +4,30 @@ import { Card } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useLocalStorage } from '@/hooks/useLocalStorage';
 
-const mockReports = [
-  {
-    id: '1',
-    reporterName: 'User456',
-    reportedUser: 'ShadyTipster',
-    reportedAvatar: '/placeholder.svg',
-    type: 'fraud' as const,
-    reason: 'Fake slip screenshots - verified with bookmaker',
-    severity: 'high' as const,
-    createdAt: '2024-01-15 16:45',
-  },
-  {
-    id: '2',
-    reporterName: 'BetterJohn',
-    reportedUser: 'SpamAccount',
-    reportedAvatar: '/placeholder.svg',
-    type: 'spam' as const,
-    reason: 'Posting excessive promotional content',
-    severity: 'medium' as const,
-    createdAt: '2024-01-15 15:20',
-  },
-];
+interface Report {
+  id: string;
+  reporterId: string;
+  reportedUserId: string;
+  type: 'fraud' | 'spam' | 'abuse' | 'other';
+  reason: string;
+  severity: 'low' | 'medium' | 'high';
+  status: 'pending' | 'reviewing' | 'resolved';
+  createdAt: string;
+}
 
 export default function Reports() {
+  const [reports] = useLocalStorage<Report[]>('userReports', []);
+  
+  const pendingReports = reports.filter(r => r.status === 'pending');
+  const highPriorityReports = reports.filter(r => r.severity === 'high');
+  const resolvedReports = reports.filter(r => r.status === 'resolved');
+  const thisWeekReports = reports.filter(r => {
+    const reportDate = new Date(r.createdAt);
+    const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+    return reportDate > weekAgo;
+  });
   return (
     <div className="max-w-7xl mx-auto space-y-6">
       {/* Header */}
@@ -48,7 +47,7 @@ export default function Reports() {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-muted-foreground">Pending</p>
-              <p className="text-2xl font-bold text-accent">2</p>
+              <p className="text-2xl font-bold text-accent">{pendingReports.length}</p>
             </div>
             <Flag className="h-8 w-8 text-accent" />
           </div>
@@ -58,7 +57,7 @@ export default function Reports() {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-muted-foreground">High Priority</p>
-              <p className="text-2xl font-bold text-loss-red">1</p>
+              <p className="text-2xl font-bold text-loss-red">{highPriorityReports.length}</p>
             </div>
             <Shield className="h-8 w-8 text-loss-red" />
           </div>
@@ -68,7 +67,7 @@ export default function Reports() {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-muted-foreground">Resolved</p>
-              <p className="text-2xl font-bold text-win-green">34</p>
+              <p className="text-2xl font-bold text-win-green">{resolvedReports.length}</p>
             </div>
             <Shield className="h-8 w-8 text-win-green" />
           </div>
@@ -78,7 +77,7 @@ export default function Reports() {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-muted-foreground">This Week</p>
-              <p className="text-2xl font-bold text-primary">8</p>
+              <p className="text-2xl font-bold text-primary">{thisWeekReports.length}</p>
             </div>
             <Flag className="h-8 w-8 text-primary" />
           </div>
@@ -88,25 +87,24 @@ export default function Reports() {
       {/* Tabs */}
       <Tabs defaultValue="pending">
         <TabsList>
-          <TabsTrigger value="pending">Pending (2)</TabsTrigger>
+          <TabsTrigger value="pending">Pending ({pendingReports.length})</TabsTrigger>
           <TabsTrigger value="reviewing">Under Review</TabsTrigger>
           <TabsTrigger value="resolved">Resolved</TabsTrigger>
         </TabsList>
 
         <TabsContent value="pending" className="mt-6">
           <div className="space-y-4">
-            {mockReports.map((report) => (
+            {pendingReports.length > 0 ? pendingReports.map((report) => (
               <Card key={report.id} className="glass-card p-6">
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex items-center gap-4">
                     <Avatar className="h-12 w-12">
-                      <AvatarImage src={report.reportedAvatar} />
-                      <AvatarFallback>{report.reportedUser.slice(0, 2).toUpperCase()}</AvatarFallback>
+                      <AvatarFallback>{report.reportedUserId.slice(0, 2).toUpperCase()}</AvatarFallback>
                     </Avatar>
                     
                     <div>
-                      <h3 className="text-lg font-semibold">{report.reportedUser}</h3>
-                      <p className="text-sm text-muted-foreground">Reported by {report.reporterName}</p>
+                      <h3 className="text-lg font-semibold">{report.reportedUserId}</h3>
+                      <p className="text-sm text-muted-foreground">Reported by {report.reporterId}</p>
                       <div className="flex gap-2 mt-2">
                         <Badge variant="outline" className="text-xs">
                           {report.type.toUpperCase()}
@@ -145,7 +143,11 @@ export default function Reports() {
                   </Button>
                 </div>
               </Card>
-            ))}
+            )) : (
+              <Card className="glass-card p-6">
+                <p className="text-center text-muted-foreground py-8">No pending reports</p>
+              </Card>
+            )}
           </div>
         </TabsContent>
 

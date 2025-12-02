@@ -1,99 +1,76 @@
 import { SlipCard } from '@/components/SlipCard';
 import { BrainScoreWidget } from '@/components/BrainScoreWidget';
 import { FreeBrainCarousel } from '@/components/FreeBrainCarousel';
+import { TipsterCarousel } from '@/components/TipsterCarousel';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { TrendingUp } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { TrendingUp, Search, Target, CheckCircle2 } from 'lucide-react';
+import { useLocalStorage } from '@/hooks/useLocalStorage';
+import { STORAGE_KEYS } from '@/lib/storageKeys';
+import { MOCK_DATA, DEFAULT_STATS } from '@/config/mockData';
 
 const Index = () => {
-  const trendingSlips = [
-    {
-      tipsterName: 'Alex Martinez',
-      tipsterAvatar: undefined,
-      picks: 5,
-      totalOdds: 12.5,
-      price: 9.99,
-      league: 'Premier League',
-      risk: 'medium' as const,
-      winStreak: 7,
-      watching: 234,
-      verified: true,
-    },
-    {
-      tipsterName: 'Sarah Johnson',
-      tipsterAvatar: undefined,
-      picks: 3,
-      totalOdds: 8.2,
-      price: 4.99,
-      league: 'La Liga',
-      risk: 'low' as const,
-      winStreak: 12,
-      watching: 189,
-      verified: true,
-    },
-    {
-      tipsterName: 'Mike Chen',
-      tipsterAvatar: undefined,
-      picks: 7,
-      totalOdds: 24.8,
-      price: 14.99,
-      league: 'Champions League',
-      risk: 'high' as const,
-      winStreak: 4,
-      watching: 412,
-      verified: true,
-    },
+  // Load user activity stats from localStorage
+  const [purchasedSlips, setPurchasedSlips] = useLocalStorage('userPurchasedSlips', DEFAULT_STATS.purchasedSlips);
+  const [winRate, setWinRate] = useLocalStorage('userWinRate', DEFAULT_STATS.winRate);
+  const [totalProfit, setTotalProfit] = useLocalStorage('userTotalProfit', DEFAULT_STATS.totalProfit);
+  const [referrals, setReferrals] = useLocalStorage(STORAGE_KEYS.REFERRAL_HISTORY, DEFAULT_STATS.referrals);
+
+  // Mock tipster data
+  const topTipsters = [
+    { id: 'geoff-lea', name: 'Geoff Lea', accuracy: 77.8, image: '/image/profile/p1.png', verified: true },
+    { id: 'basketball-pro', name: 'Basketball Pro', accuracy: 70.3, image: '/image/profile/p2.png', verified: false },
+    { id: 'soccer-expert', name: 'Soccer Expert', accuracy: 75.5, image: '/image/profile/p3.png', verified: true },
+  ];
+
+  const tipstersToFollow = [
+    { id: 'hanscana', name: 'Hanscana', accuracy: 62.7, image: '/image/profile/p4.png', verified: true },
+    { id: 'winners', name: 'Winners', accuracy: 62.2, image: '/image/profile/p5.png', verified: false },
+    { id: 'elite-picks', name: 'Elite Picks', accuracy: 68.9, image: '/image/profile/p1.png', verified: true },
   ];
 
   return (
     <div className="space-y-8">
       {/* Free Daily Brain Banner Carousel */}
       <FreeBrainCarousel
-        slides={[
-          {
-            id: '1',
-            tipsterName: 'Sarah Johnson',
-            winStreak: 12,
-            accuracy: 94,
-            dropTime: '2h 14m',
-            availableTime: '11:00 AM EAT',
-            description: 'Today\'s Free Brain from Elite Tipster',
-            image: '/image1.png',
-            gradientFrom: 'from-purple-600',
-            gradientTo: 'to-purple-800',
-            badgeColor: 'bg-purple-500/20 text-purple-300 border-purple-500/50',
-          },
-          {
-            id: '2',
-            tipsterName: 'Alex Martinez',
-            winStreak: 8,
-            accuracy: 89,
-            dropTime: '1h 45m',
-            availableTime: '10:30 AM EAT',
-            description: 'Premium Betting Tips - Limited Time Offer',
-            image: '/image2.png',
-            gradientFrom: 'from-blue-600',
-            gradientTo: 'to-blue-800',
-            badgeColor: 'bg-blue-500/20 text-blue-300 border-blue-500/50',
-          },
-          {
-            id: '3',
-            tipsterName: 'Mike Chen',
-            winStreak: 15,
-            accuracy: 92,
-            dropTime: '3h 30m',
-            availableTime: '12:15 PM EAT',
-            description: 'Exclusive Predictions from Top Tipsters',
-            image: '/image3.png',
-            gradientFrom: 'from-orange-600',
-            gradientTo: 'to-orange-800',
-            badgeColor: 'bg-orange-500/20 text-orange-300 border-orange-500/50',
-          },
-        ]}
         autoPlay={true}
         autoPlayInterval={5000}
       />
+
+      {/* Search Bar */}
+      <div className="relative">
+        <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+        <Input
+          type="text"
+          placeholder="Search for tipster"
+          className="pl-12 h-14 bg-gray-800/50 border-gray-700 text-white placeholder:text-gray-400 rounded-2xl text-lg"
+        />
+      </div>
+
+      {/* Top Tipsters Section */}
+      <div className="space-y-4">
+        <div className="flex items-center gap-3">
+          <div className="p-2 bg-primary/20 rounded-xl">
+            <Target className="h-6 w-6 text-primary" />
+          </div>
+          <h2 className="font-display text-2xl font-bold">Top Tipsters</h2>
+        </div>
+        <TipsterCarousel tipsters={topTipsters} autoPlay={true} autoPlayInterval={3000} />
+      </div>
+
+      {/* Tipsters to Follow Section */}
+      <div className="space-y-4">
+        <div className="flex items-center gap-3">
+          <div className="p-2 bg-emerald-500/20 rounded-xl">
+            <CheckCircle2 className="h-6 w-6 text-emerald-500" />
+          </div>
+          <h2 className="font-display text-2xl font-bold">Tipsters to follow</h2>
+        </div>
+        <TipsterCarousel tipsters={tipstersToFollow} autoPlay={true} autoPlayInterval={3000} />
+      </div>
+
 
       {/* Main Content Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -108,9 +85,9 @@ const Index = () => {
               View All →
             </Button>
           </div>
-          
+
           <div className="grid gap-6">
-            {trendingSlips.map((slip, idx) => (
+            {MOCK_DATA.indexTrendingSlips.map((slip, idx) => (
               <SlipCard key={idx} {...slip} />
             ))}
           </div>
@@ -134,19 +111,19 @@ const Index = () => {
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <span className="text-sm text-muted-foreground">Purchased Slips</span>
-                <span className="font-bold text-primary">24</span>
+                <span className="font-bold text-primary">{purchasedSlips}</span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-sm text-muted-foreground">Win Rate</span>
-                <span className="font-bold text-win-green">62.5%</span>
+                <span className="font-bold text-win-green">{winRate}%</span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-sm text-muted-foreground">Total Profit</span>
-                <span className="font-bold text-gold">+TSH 187,500</span>
+                <span className="font-bold text-gold">+TSH {totalProfit.toLocaleString()}</span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-sm text-muted-foreground">Referrals</span>
-                <span className="font-bold">7</span>
+                <span className="font-bold">{referrals}</span>
               </div>
             </div>
           </Card>

@@ -4,11 +4,19 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { FileText, DollarSign, Brain, Award, Users, TrendingUp } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useLocalStorage } from '@/hooks/useLocalStorage';
+import { DASHBOARD_METRICS } from '@/config/mockData';
 
 export default function TipsterDashboard() {
   usePageLoading();
   const { user } = useAuth();
   const navigate = useNavigate();
+
+  // Load metrics from localStorage
+  const [totalRevenue] = useLocalStorage('tipsterTotalRevenue', DASHBOARD_METRICS.tipster.totalRevenue);
+  const [slipsCreated] = useLocalStorage('tipsterSlipsCreated', DASHBOARD_METRICS.tipster.slipsCreated);
+  const [winRate] = useLocalStorage('tipsterWinRate', DASHBOARD_METRICS.tipster.winRate);
+  const [followers] = useLocalStorage('tipsterFollowers', DASHBOARD_METRICS.tipster.followers);
 
   const quickActions = [
     {
@@ -57,22 +65,22 @@ export default function TipsterDashboard() {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <Card className="glass-card p-6 border-primary/20">
           <div className="text-sm text-muted-foreground mb-2">Total Revenue</div>
-          <div className="text-2xl font-bold text-gradient-primary">$0.00</div>
+          <div className="text-2xl font-bold text-gradient-primary">TSH {totalRevenue.toLocaleString()}</div>
           <div className="text-xs text-muted-foreground mt-2">This month</div>
         </Card>
         <Card className="glass-card p-6 border-primary/20">
           <div className="text-sm text-muted-foreground mb-2">Slips Created</div>
-          <div className="text-2xl font-bold text-gradient-primary">0</div>
+          <div className="text-2xl font-bold text-gradient-primary">{slipsCreated}</div>
           <div className="text-xs text-muted-foreground mt-2">Total</div>
         </Card>
         <Card className="glass-card p-6 border-primary/20">
           <div className="text-sm text-muted-foreground mb-2">Win Rate</div>
-          <div className="text-2xl font-bold text-gradient-primary">0%</div>
+          <div className="text-2xl font-bold text-gradient-primary">{winRate}%</div>
           <div className="text-xs text-muted-foreground mt-2">All time</div>
         </Card>
         <Card className="glass-card p-6 border-primary/20">
           <div className="text-sm text-muted-foreground mb-2">Followers</div>
-          <div className="text-2xl font-bold text-gradient-primary">0</div>
+          <div className="text-2xl font-bold text-gradient-primary">{followers}</div>
           <div className="text-xs text-muted-foreground mt-2">Active</div>
         </Card>
       </div>

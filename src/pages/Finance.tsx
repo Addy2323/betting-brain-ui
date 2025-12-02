@@ -1,8 +1,17 @@
 import { BarChart3, DollarSign, TrendingUp, TrendingDown } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useLocalStorage } from '@/hooks/useLocalStorage';
+import { STORAGE_KEYS } from '@/lib/storageKeys';
 
 export default function Finance() {
+  // Load finance data from localStorage - completely dependent on localStorage
+  const [totalRevenue, setTotalRevenue] = useLocalStorage('financeTotalRevenue', null);
+  const [monthlyRevenue, setMonthlyRevenue] = useLocalStorage('financeMonthlyRevenue', null);
+  const [pendingPayouts, setPendingPayouts] = useLocalStorage('financePendingPayouts', null);
+  const [platformFee, setPlatformFee] = useLocalStorage('financePlatformFee', null);
+  const [selectedTab, setSelectedTab] = useLocalStorage('financeTab', 'overview');
+
   return (
     <div className="max-w-7xl mx-auto space-y-6">
       {/* Header */}
@@ -23,11 +32,15 @@ export default function Finance() {
             <p className="text-sm text-muted-foreground">Total Revenue</p>
             <DollarSign className="h-5 w-5 text-primary" />
           </div>
-          <p className="text-3xl font-bold text-primary">TSH 45,230,000</p>
-          <div className="flex items-center gap-1 mt-2">
-            <TrendingUp className="h-4 w-4 text-win-green" />
-            <span className="text-xs text-win-green">+12.5% from last month</span>
-          </div>
+          <p className="text-3xl font-bold text-primary">
+            {totalRevenue !== null ? `TSH ${totalRevenue.toLocaleString()}` : 'No data'}
+          </p>
+          {totalRevenue !== null && (
+            <div className="flex items-center gap-1 mt-2">
+              <TrendingUp className="h-4 w-4 text-win-green" />
+              <span className="text-xs text-win-green">+12.5% from last month</span>
+            </div>
+          )}
         </Card>
 
         <Card className="glass-card p-6">
@@ -35,11 +48,15 @@ export default function Finance() {
             <p className="text-sm text-muted-foreground">This Month</p>
             <DollarSign className="h-5 w-5 text-accent" />
           </div>
-          <p className="text-3xl font-bold text-accent">TSH 12,890,000</p>
-          <div className="flex items-center gap-1 mt-2">
-            <TrendingUp className="h-4 w-4 text-win-green" />
-            <span className="text-xs text-win-green">+8.3% from last week</span>
-          </div>
+          <p className="text-3xl font-bold text-accent">
+            {monthlyRevenue !== null ? `TSH ${monthlyRevenue.toLocaleString()}` : 'No data'}
+          </p>
+          {monthlyRevenue !== null && (
+            <div className="flex items-center gap-1 mt-2">
+              <TrendingUp className="h-4 w-4 text-win-green" />
+              <span className="text-xs text-win-green">+8.3% from last week</span>
+            </div>
+          )}
         </Card>
 
         <Card className="glass-card p-6">
@@ -47,8 +64,10 @@ export default function Finance() {
             <p className="text-sm text-muted-foreground">Pending Payouts</p>
             <DollarSign className="h-5 w-5 text-gold" />
           </div>
-          <p className="text-3xl font-bold text-gold">TSH 8,450,000</p>
-          <p className="text-xs text-muted-foreground mt-2">45 pending requests</p>
+          <p className="text-3xl font-bold text-gold">
+            {pendingPayouts !== null ? `TSH ${pendingPayouts.toLocaleString()}` : 'No data'}
+          </p>
+          <p className="text-xs text-muted-foreground mt-2">0 pending requests</p>
         </Card>
 
         <Card className="glass-card p-6">
@@ -56,8 +75,10 @@ export default function Finance() {
             <p className="text-sm text-muted-foreground">Platform Fee</p>
             <DollarSign className="h-5 w-5 text-win-green" />
           </div>
-          <p className="text-3xl font-bold text-win-green">TSH 5,670,000</p>
-          <p className="text-xs text-muted-foreground mt-2">30% commission</p>
+          <p className="text-3xl font-bold text-win-green">
+            {platformFee !== null ? `TSH ${platformFee.toLocaleString()}` : 'No data'}
+          </p>
+          <p className="text-xs text-muted-foreground mt-2">17% commission</p>
         </Card>
       </div>
 
@@ -72,31 +93,35 @@ export default function Finance() {
         <TabsContent value="overview" className="mt-6">
           <Card className="glass-card p-6">
             <h3 className="text-lg font-semibold mb-4">Revenue Breakdown</h3>
-            <div className="space-y-4">
-              <div className="flex items-center justify-between p-4 rounded-lg bg-muted/30">
-                <div>
-                  <p className="font-medium">Slip Sales</p>
-                  <p className="text-sm text-muted-foreground">1,234 slips sold</p>
+            {totalRevenue !== null ? (
+              <div className="space-y-4">
+                <div className="flex items-center justify-between p-4 rounded-lg bg-muted/30">
+                  <div>
+                    <p className="font-medium">Slip Sales</p>
+                    <p className="text-sm text-muted-foreground">Add data to see slips</p>
+                  </div>
+                  <p className="text-xl font-bold text-primary">TSH 0</p>
                 </div>
-                <p className="text-xl font-bold text-primary">TSH 38,560,000</p>
-              </div>
-              
-              <div className="flex items-center justify-between p-4 rounded-lg bg-muted/30">
-                <div>
-                  <p className="font-medium">Subscription Fees</p>
-                  <p className="text-sm text-muted-foreground">567 active subs</p>
+                
+                <div className="flex items-center justify-between p-4 rounded-lg bg-muted/30">
+                  <div>
+                    <p className="font-medium">Subscription Fees</p>
+                    <p className="text-sm text-muted-foreground">Add data to see subs</p>
+                  </div>
+                  <p className="text-xl font-bold text-accent">TSH 0</p>
                 </div>
-                <p className="text-xl font-bold text-accent">TSH 4,250,000</p>
-              </div>
-              
-              <div className="flex items-center justify-between p-4 rounded-lg bg-muted/30">
-                <div>
-                  <p className="font-medium">Premium Features</p>
-                  <p className="text-sm text-muted-foreground">89 users</p>
+                
+                <div className="flex items-center justify-between p-4 rounded-lg bg-muted/30">
+                  <div>
+                    <p className="font-medium">Premium Features</p>
+                    <p className="text-sm text-muted-foreground">Add data to see users</p>
+                  </div>
+                  <p className="text-xl font-bold text-gold">TSH 0</p>
                 </div>
-                <p className="text-xl font-bold text-gold">TSH 2,420,000</p>
               </div>
-            </div>
+            ) : (
+              <p className="text-center text-muted-foreground py-8">No data available. Add finance data to localStorage to see breakdown.</p>
+            )}
           </Card>
         </TabsContent>
 

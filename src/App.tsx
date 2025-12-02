@@ -28,6 +28,8 @@ import Unauthorized from "./pages/Unauthorized";
 import TipsterDashboard from "./pages/TipsterDashboard";
 import AdminDashboard from "./pages/AdminDashboard";
 import SuperAdminDashboard from "./pages/SuperAdminDashboard";
+import TipsterProfile from "./pages/TipsterProfile";
+import BetslipDetails from "./pages/BetslipDetails";
 
 const queryClient = new QueryClient();
 
@@ -46,23 +48,12 @@ const App = () => (
                   <Route path="/" element={<Splash />} />
                   <Route path="/auth" element={<Auth />} />
                   <Route path="/unauthorized" element={<Unauthorized />} />
-                  
-                  {/* Protected Routes */}
-                  <Route
-                    path="/index"
-                    element={
-                      <ProtectedRoute>
-                        <Layout />
-                      </ProtectedRoute>
-                    }
-                  >
-                    <Route index element={<Index />} />
-                  </Route>
 
+                  {/* Protected Routes - Role-based dashboards */}
                   <Route
                     path="/tipster-dashboard"
                     element={
-                      <ProtectedRoute allowedRoles={['tipster', 'admin', 'super_admin']}>
+                      <ProtectedRoute allowedRoles={['tipster']}>
                         <Layout />
                       </ProtectedRoute>
                     }
@@ -73,7 +64,7 @@ const App = () => (
                   <Route
                     path="/admin-dashboard"
                     element={
-                      <ProtectedRoute allowedRoles={['admin', 'super_admin']}>
+                      <ProtectedRoute allowedRoles={['admin']}>
                         <Layout />
                       </ProtectedRoute>
                     }
@@ -90,6 +81,17 @@ const App = () => (
                     }
                   >
                     <Route index element={<SuperAdminDashboard />} />
+                  </Route>
+
+                  <Route
+                    path="/index"
+                    element={
+                      <ProtectedRoute allowedRoles={['user']}>
+                        <Layout />
+                      </ProtectedRoute>
+                    }
+                  >
+                    <Route index element={<Index />} />
                   </Route>
 
                   {/* Protected Feature Routes */}
@@ -110,6 +112,8 @@ const App = () => (
                     <Route path="/withdrawals" element={<Withdrawals />} />
                     <Route path="/disputes" element={<Disputes />} />
                     <Route path="/reports" element={<Reports />} />
+                    <Route path="/tipster/:tipsterId" element={<TipsterProfile />} />
+                    <Route path="/betslip/:betslipId" element={<BetslipDetails />} />
                     {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                     <Route path="*" element={<NotFound />} />
                   </Route>

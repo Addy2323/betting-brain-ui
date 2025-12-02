@@ -4,34 +4,51 @@ import { Card } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useLocalStorage } from '@/hooks/useLocalStorage';
+import { DEFAULT_STATS } from '@/config/mockData';
 
-const mockApplications = [
-  {
-    id: '1',
-    name: 'KingBet254',
-    avatar: '/placeholder.svg',
-    email: 'kingbet@example.com',
-    slipsSubmitted: 15,
-    winRate: 73,
-    avgOdds: 12.5,
-    status: 'pending' as const,
-    appliedDate: '2024-01-15',
-  },
-  {
-    id: '2',
-    name: 'AccaPro',
-    avatar: '/placeholder.svg',
-    email: 'acca@example.com',
-    slipsSubmitted: 20,
-    winRate: 65,
-    avgOdds: 25.3,
-    status: 'pending' as const,
-    appliedDate: '2024-01-14',
-  },
-];
+interface TipsterApplication {
+  id: string;
+  name: string;
+  avatar: string;
+  email: string;
+  slipsSubmitted: number;
+  winRate: number;
+  avgOdds: number;
+  status: 'pending' | 'approved' | 'rejected';
+  appliedDate: string;
+}
 
 export default function VerifyTipsters() {
-  const pendingCount = mockApplications.filter(a => a.status === 'pending').length;
+  const [applications, setApplications] = useLocalStorage<TipsterApplication[]>(
+    'tipsterApplications',
+    []
+  );
+  const [approvedCount, setApprovedCount] = useLocalStorage('tipsterApprovedCount', 0);
+  const [rejectedCount, setRejectedCount] = useLocalStorage('tipsterRejectedCount', 0);
+
+  const pendingCount = applications.filter(a => a.status === 'pending').length;
+  const approvedApps = applications.filter(a => a.status === 'approved').length;
+  const rejectedApps = applications.filter(a => a.status === 'rejected').length;
+  const totalTipsters = approvedApps;
+
+  // Handle approve
+  const handleApprove = (id: string) => {
+    const updated = applications.map(app =>
+      app.id === id ? { ...app, status: 'approved' as const } : app
+    );
+    setApplications(updated);
+    setApprovedCount(approvedCount + 1);
+  };
+
+  // Handle reject
+  const handleReject = (id: string) => {
+    const updated = applications.map(app =>
+      app.id === id ? { ...app, status: 'rejected' as const } : app
+    );
+    setApplications(updated);
+    setRejectedCount(rejectedCount + 1);
+  };
 
   return (
     <div className="max-w-7xl mx-auto space-y-6">
@@ -62,7 +79,7 @@ export default function VerifyTipsters() {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-muted-foreground">Approved</p>
-              <p className="text-2xl font-bold text-win-green">24</p>
+              <p className="text-2xl font-bold text-win-green">{approvedCount}</p>
             </div>
             <CheckCircle className="h-8 w-8 text-win-green" />
           </div>
@@ -72,7 +89,7 @@ export default function VerifyTipsters() {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-muted-foreground">Rejected</p>
-              <p className="text-2xl font-bold text-loss-red">8</p>
+              <p className="text-2xl font-bold text-loss-red">{rejectedCount}</p>
             </div>
             <XCircle className="h-8 w-8 text-loss-red" />
           </div>
@@ -82,7 +99,7 @@ export default function VerifyTipsters() {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-muted-foreground">Total Tipsters</p>
-              <p className="text-2xl font-bold text-primary">32</p>
+              <p className="text-2xl font-bold text-primary">{totalTipsters}</p>
             </div>
             <UserCheck className="h-8 w-8 text-primary" />
           </div>
@@ -99,7 +116,7 @@ export default function VerifyTipsters() {
 
         <TabsContent value="pending" className="mt-6">
           <div className="space-y-4">
-            {mockApplications.map((application) => (
+            {applications.filter(a => a.status === 'pending').map((application) => (
               <Card key={application.id} className="glass-card p-6">
                 <div className="flex items-start justify-between">
                   <div className="flex items-center gap-4">
@@ -139,11 +156,18 @@ export default function VerifyTipsters() {
                   <Button variant="outline" className="flex-1">
                     View Slips
                   </Button>
-                  <Button variant="destructive" className="flex-1">
+                  <Button 
+                    variant="destructive" 
+                    className="flex-1"
+                    onClick={() => handleReject(application.id)}
+                  >
                     <XCircle className="h-4 w-4 mr-2" />
                     Reject
                   </Button>
-                  <Button className="flex-1 bg-gradient-to-r from-win-green to-win-green/80">
+                  <Button 
+                    className="flex-1 bg-gradient-to-r from-win-green to-win-green/80 hover:from-win-green/90 hover:to-win-green/70"
+                    onClick={() => handleApprove(application.id)}
+                  >
                     <CheckCircle className="h-4 w-4 mr-2" />
                     Approve
                   </Button>
@@ -154,11 +178,95 @@ export default function VerifyTipsters() {
         </TabsContent>
 
         <TabsContent value="approved">
-          <p className="text-center text-muted-foreground py-12">No approved applications to show</p>
+          <div className="space-y-4">
+            {applications.filter(a => a.status === 'approved').length > 0 ? (
+              applications.filter(a => a.status === 'approved').map((application) => (
+                <Card key={application.id} className="glass-card p-6">
+                  <div className="flex items-start justify-between">
+                    <div className="flex items-center gap-4">
+                      <Avatar className="h-16 w-16">
+                        <AvatarImage src={application.avatar} />
+                        <AvatarFallback>{application.name.slice(0, 2).toUpperCase()}</AvatarFallback>
+                      </Avatar>
+                      
+                      <div>
+                        <h3 className="text-xl font-semibold">{application.name}</h3>
+                        <p className="text-sm text-muted-foreground">{application.email}</p>
+                        <p className="text-xs text-muted-foreground mt-1">Applied: {application.appliedDate}</p>
+                      </div>
+                    </div>
+
+                    <Badge className="bg-win-green/20 text-win-green border-win-green/50">
+                      APPROVED
+                    </Badge>
+                  </div>
+
+                  <div className="grid grid-cols-3 gap-4 mt-6 p-4 rounded-lg bg-muted/30">
+                    <div className="text-center">
+                      <p className="text-2xl font-bold text-primary">{application.slipsSubmitted}</p>
+                      <p className="text-xs text-muted-foreground">Slips Submitted</p>
+                    </div>
+                    <div className="text-center">
+                      <p className="text-2xl font-bold text-win-green">{application.winRate}%</p>
+                      <p className="text-xs text-muted-foreground">Win Rate</p>
+                    </div>
+                    <div className="text-center">
+                      <p className="text-2xl font-bold text-gold">{application.avgOdds}</p>
+                      <p className="text-xs text-muted-foreground">Avg Odds</p>
+                    </div>
+                  </div>
+                </Card>
+              ))
+            ) : (
+              <p className="text-center text-muted-foreground py-12">No approved applications to show</p>
+            )}
+          </div>
         </TabsContent>
 
         <TabsContent value="rejected">
-          <p className="text-center text-muted-foreground py-12">No rejected applications to show</p>
+          <div className="space-y-4">
+            {applications.filter(a => a.status === 'rejected').length > 0 ? (
+              applications.filter(a => a.status === 'rejected').map((application) => (
+                <Card key={application.id} className="glass-card p-6">
+                  <div className="flex items-start justify-between">
+                    <div className="flex items-center gap-4">
+                      <Avatar className="h-16 w-16">
+                        <AvatarImage src={application.avatar} />
+                        <AvatarFallback>{application.name.slice(0, 2).toUpperCase()}</AvatarFallback>
+                      </Avatar>
+                      
+                      <div>
+                        <h3 className="text-xl font-semibold">{application.name}</h3>
+                        <p className="text-sm text-muted-foreground">{application.email}</p>
+                        <p className="text-xs text-muted-foreground mt-1">Applied: {application.appliedDate}</p>
+                      </div>
+                    </div>
+
+                    <Badge className="bg-loss-red/20 text-loss-red border-loss-red/50">
+                      REJECTED
+                    </Badge>
+                  </div>
+
+                  <div className="grid grid-cols-3 gap-4 mt-6 p-4 rounded-lg bg-muted/30">
+                    <div className="text-center">
+                      <p className="text-2xl font-bold text-primary">{application.slipsSubmitted}</p>
+                      <p className="text-xs text-muted-foreground">Slips Submitted</p>
+                    </div>
+                    <div className="text-center">
+                      <p className="text-2xl font-bold text-win-green">{application.winRate}%</p>
+                      <p className="text-xs text-muted-foreground">Win Rate</p>
+                    </div>
+                    <div className="text-center">
+                      <p className="text-2xl font-bold text-gold">{application.avgOdds}</p>
+                      <p className="text-xs text-muted-foreground">Avg Odds</p>
+                    </div>
+                  </div>
+                </Card>
+              ))
+            ) : (
+              <p className="text-center text-muted-foreground py-12">No rejected applications to show</p>
+            )}
+          </div>
         </TabsContent>
       </Tabs>
     </div>

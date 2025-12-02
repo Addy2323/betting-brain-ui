@@ -4,32 +4,48 @@ import { Card } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useLocalStorage } from '@/hooks/useLocalStorage';
+import { STORAGE_KEYS } from '@/lib/storageKeys';
+import { MOCK_DATA, FINANCE_CONFIG } from '@/config/mockData';
 
-const mockWithdrawals = [
-  {
-    id: '1',
-    tipsterName: 'KingBet254',
-    avatar: '/placeholder.svg',
-    amount: 450,
-    method: 'M-Pesa',
-    phone: '+254712345678',
-    requestDate: '2024-01-15 14:30',
-    status: 'pending' as const,
-  },
-  {
-    id: '2',
-    tipsterName: 'SafeBets_KE',
-    avatar: '/placeholder.svg',
-    amount: 280,
-    method: 'Bank Transfer',
-    accountNumber: '****5678',
-    requestDate: '2024-01-15 12:15',
-    status: 'pending' as const,
-  },
-];
+interface Withdrawal {
+  id: string;
+  tipsterName: string;
+  avatar: string;
+  amount: number;
+  method: string;
+  phone?: string;
+  accountNumber?: string;
+  requestDate: string;
+  status: 'pending' | 'approved' | 'rejected';
+}
 
 export default function Withdrawals() {
-  const pendingCount = mockWithdrawals.filter(w => w.status === 'pending').length;
+  const [withdrawals, setWithdrawals] = useLocalStorage<Withdrawal[]>(
+    STORAGE_KEYS.WITHDRAWAL_HISTORY,
+    []
+  );
+  const [selectedTab, setSelectedTab] = useLocalStorage('withdrawalsTab', 'pending');
+
+  const pendingCount = withdrawals.filter(w => w.status === 'pending').length;
+  const approvedCount = withdrawals.filter(w => w.status === 'approved').length;
+  const rejectedCount = withdrawals.filter(w => w.status === 'rejected').length;
+
+  // Handle approve
+  const handleApprove = (id: string) => {
+    const updated = withdrawals.map(w =>
+      w.id === id ? { ...w, status: 'approved' as const } : w
+    );
+    setWithdrawals(updated);
+  };
+
+  // Handle reject
+  const handleReject = (id: string) => {
+    const updated = withdrawals.map(w =>
+      w.id === id ? { ...w, status: 'rejected' as const } : w
+    );
+    setWithdrawals(updated);
+  };
 
   return (
     <div className="max-w-7xl mx-auto space-y-6">
@@ -54,25 +70,25 @@ export default function Withdrawals() {
             </div>
             <Clock className="h-8 w-8 text-accent" />
           </div>
-          <p className="text-xs text-muted-foreground mt-2">Total: TSH 730,000</p>
+          <p className="text-xs text-muted-foreground mt-2">Total: TSH {(pendingCount * 100000).toLocaleString()}</p>
         </Card>
 
         <Card className="glass-card p-4">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-muted-foreground">Approved Today</p>
-              <p className="text-2xl font-bold text-win-green">12</p>
+              <p className="text-2xl font-bold text-win-green">{approvedCount}</p>
             </div>
             <CheckCircle className="h-8 w-8 text-win-green" />
           </div>
-          <p className="text-xs text-muted-foreground mt-2">Total: TSH 3,450,000</p>
+          <p className="text-xs text-muted-foreground mt-2">Total: TSH {(approvedCount * 100000).toLocaleString()}</p>
         </Card>
 
         <Card className="glass-card p-4">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-muted-foreground">Rejected</p>
-              <p className="text-2xl font-bold text-loss-red">2</p>
+              <p className="text-2xl font-bold text-loss-red">{rejectedCount}</p>
             </div>
             <XCircle className="h-8 w-8 text-loss-red" />
           </div>
@@ -83,11 +99,11 @@ export default function Withdrawals() {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-muted-foreground">This Month</p>
-              <p className="text-2xl font-bold text-primary">TSH 45,230,000</p>
+              <p className="text-2xl font-bold text-primary">TSH {(approvedCount * 100000).toLocaleString()}</p>
             </div>
             <DollarSign className="h-8 w-8 text-primary" />
           </div>
-          <p className="text-xs text-muted-foreground mt-2">345 processed</p>
+          <p className="text-xs text-muted-foreground mt-2">{approvedCount + rejectedCount + pendingCount} processed</p>
         </Card>
       </div>
 
@@ -101,7 +117,7 @@ export default function Withdrawals() {
 
         <TabsContent value="pending" className="mt-6">
           <div className="space-y-4">
-            {mockWithdrawals.map((withdrawal) => (
+            {withdrawals.filter(w => w.status === 'pending').map((withdrawal) => (
               <Card key={withdrawal.id} className="glass-card p-6">
                 <div className="flex items-start justify-between">
                   <div className="flex items-center gap-4">
@@ -137,11 +153,18 @@ export default function Withdrawals() {
                   <Button variant="outline" className="flex-1">
                     View Details
                   </Button>
-                  <Button variant="destructive" className="flex-1">
+                  <Button 
+                    variant="destructive" 
+                    className="flex-1"
+                    onClick={() => handleReject(withdrawal.id)}
+                  >
                     <XCircle className="h-4 w-4 mr-2" />
                     Reject
                   </Button>
-                  <Button className="flex-1 bg-gradient-to-r from-win-green to-win-green/80">
+                  <Button 
+                    className="flex-1 bg-gradient-to-r from-win-green to-win-green/80 hover:from-win-green/90 hover:to-win-green/70"
+                    onClick={() => handleApprove(withdrawal.id)}
+                  >
                     <CheckCircle className="h-4 w-4 mr-2" />
                     Approve
                   </Button>
@@ -152,11 +175,87 @@ export default function Withdrawals() {
         </TabsContent>
 
         <TabsContent value="approved">
-          <p className="text-center text-muted-foreground py-12">No approved withdrawals to show</p>
+          <div className="space-y-4">
+            {withdrawals.filter(w => w.status === 'approved').length > 0 ? (
+              withdrawals.filter(w => w.status === 'approved').map((withdrawal) => (
+                <Card key={withdrawal.id} className="glass-card p-6">
+                  <div className="flex items-start justify-between">
+                    <div className="flex items-center gap-4">
+                      <Avatar className="h-12 w-12">
+                        <AvatarImage src={withdrawal.avatar} />
+                        <AvatarFallback>{withdrawal.tipsterName.slice(0, 2).toUpperCase()}</AvatarFallback>
+                      </Avatar>
+                      
+                      <div>
+                        <h3 className="text-lg font-semibold">{withdrawal.tipsterName}</h3>
+                        <p className="text-sm text-muted-foreground">{withdrawal.method}</p>
+                        <p className="text-xs text-muted-foreground mt-1">
+                          {'phone' in withdrawal ? withdrawal.phone : withdrawal.accountNumber}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="text-right">
+                      <p className="text-2xl font-bold text-primary">TSH {withdrawal.amount * 1000}</p>
+                      <Badge className="mt-2 bg-win-green/20 text-win-green border-win-green/50">
+                        APPROVED
+                      </Badge>
+                    </div>
+                  </div>
+
+                  <div className="mt-4 p-3 rounded-lg bg-muted/30">
+                    <p className="text-xs text-muted-foreground">
+                      Requested: {withdrawal.requestDate}
+                    </p>
+                  </div>
+                </Card>
+              ))
+            ) : (
+              <p className="text-center text-muted-foreground py-12">No approved withdrawals to show</p>
+            )}
+          </div>
         </TabsContent>
 
         <TabsContent value="rejected">
-          <p className="text-center text-muted-foreground py-12">No rejected withdrawals to show</p>
+          <div className="space-y-4">
+            {withdrawals.filter(w => w.status === 'rejected').length > 0 ? (
+              withdrawals.filter(w => w.status === 'rejected').map((withdrawal) => (
+                <Card key={withdrawal.id} className="glass-card p-6">
+                  <div className="flex items-start justify-between">
+                    <div className="flex items-center gap-4">
+                      <Avatar className="h-12 w-12">
+                        <AvatarImage src={withdrawal.avatar} />
+                        <AvatarFallback>{withdrawal.tipsterName.slice(0, 2).toUpperCase()}</AvatarFallback>
+                      </Avatar>
+                      
+                      <div>
+                        <h3 className="text-lg font-semibold">{withdrawal.tipsterName}</h3>
+                        <p className="text-sm text-muted-foreground">{withdrawal.method}</p>
+                        <p className="text-xs text-muted-foreground mt-1">
+                          {'phone' in withdrawal ? withdrawal.phone : withdrawal.accountNumber}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="text-right">
+                      <p className="text-2xl font-bold text-primary">TSH {withdrawal.amount * 1000}</p>
+                      <Badge className="mt-2 bg-loss-red/20 text-loss-red border-loss-red/50">
+                        REJECTED
+                      </Badge>
+                    </div>
+                  </div>
+
+                  <div className="mt-4 p-3 rounded-lg bg-muted/30">
+                    <p className="text-xs text-muted-foreground">
+                      Requested: {withdrawal.requestDate}
+                    </p>
+                  </div>
+                </Card>
+              ))
+            ) : (
+              <p className="text-center text-muted-foreground py-12">No rejected withdrawals to show</p>
+            )}
+          </div>
         </TabsContent>
       </Tabs>
     </div>

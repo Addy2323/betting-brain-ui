@@ -2,63 +2,18 @@ import { SlipCard } from '@/components/SlipCard';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Search, TrendingUp } from 'lucide-react';
-
-const mockTrendingSlips = [
-  {
-    id: '1',
-    tipsterName: 'KingBet254',
-    tipsterAvatar: '/placeholder.svg',
-    picks: 5,
-    totalOdds: 23.5,
-    price: 15,
-    league: 'Premier League',
-    risk: 'medium' as const,
-    winStreak: 7,
-    watching: 234,
-    verified: true,
-  },
-  {
-    id: '2',
-    tipsterName: 'NairobiTips',
-    tipsterAvatar: '/placeholder.svg',
-    picks: 3,
-    totalOdds: 8.2,
-    price: 8,
-    league: 'La Liga',
-    risk: 'low' as const,
-    winStreak: 12,
-    watching: 456,
-    verified: true,
-  },
-  {
-    id: '3',
-    tipsterName: 'AccaMaster',
-    tipsterAvatar: '/placeholder.svg',
-    picks: 8,
-    totalOdds: 156.4,
-    price: 25,
-    league: 'Serie A',
-    risk: 'high' as const,
-    winStreak: 3,
-    watching: 789,
-    verified: false,
-  },
-  {
-    id: '4',
-    tipsterName: 'SafeBets_KE',
-    tipsterAvatar: '/placeholder.svg',
-    picks: 4,
-    totalOdds: 12.8,
-    price: 10,
-    league: 'Bundesliga',
-    risk: 'low' as const,
-    winStreak: 15,
-    watching: 567,
-    verified: true,
-  },
-];
+import { useState } from 'react';
+import { useLocalStorage } from '@/hooks/useLocalStorage';
+import { STORAGE_KEYS } from '@/lib/storageKeys';
+import { MOCK_DATA } from '@/config/mockData';
 
 export default function Trending() {
+  const [searchQuery, setSearchQuery] = useLocalStorage('trendingSearch', '');
+  const [selectedLeague, setSelectedLeague] = useLocalStorage('trendingLeague', 'all');
+  const [selectedRisk, setSelectedRisk] = useLocalStorage('trendingRisk', 'all');
+  const [sortBy, setSortBy] = useLocalStorage('trendingSort', 'watching');
+  const [favorites, setFavorites] = useLocalStorage(STORAGE_KEYS.FAVORITES, []);
+
   return (
     <div className="max-w-7xl mx-auto space-y-6">
       {/* Header */}
@@ -77,10 +32,15 @@ export default function Trending() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input placeholder="Search tipsters..." className="pl-9" />
+            <Input 
+              placeholder="Search tipsters..." 
+              className="pl-9"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
           </div>
           
-          <Select defaultValue="all">
+          <Select value={selectedLeague} onValueChange={setSelectedLeague}>
             <SelectTrigger>
               <SelectValue placeholder="League" />
             </SelectTrigger>
@@ -93,7 +53,7 @@ export default function Trending() {
             </SelectContent>
           </Select>
 
-          <Select defaultValue="all">
+          <Select value={selectedRisk} onValueChange={setSelectedRisk}>
             <SelectTrigger>
               <SelectValue placeholder="Risk Level" />
             </SelectTrigger>
@@ -105,7 +65,7 @@ export default function Trending() {
             </SelectContent>
           </Select>
 
-          <Select defaultValue="watching">
+          <Select value={sortBy} onValueChange={setSortBy}>
             <SelectTrigger>
               <SelectValue placeholder="Sort By" />
             </SelectTrigger>
@@ -121,7 +81,7 @@ export default function Trending() {
 
       {/* Slips Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {mockTrendingSlips.map((slip) => (
+        {MOCK_DATA.trendingSlips.map((slip) => (
           <SlipCard key={slip.id} {...slip} />
         ))}
       </div>

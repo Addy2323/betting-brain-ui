@@ -2,6 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer utilities {
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+}
+
 /* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
 All colors MUST be HSL.
 */
@@ -47,21 +58,21 @@ All colors MUST be HSL.
     --gold-glow: 45 100% 70%;
     --win-green: 142 76% 45%;
     --loss-red: 0 85% 60%;
-    
+
     /* Glassmorphism */
     --glass: 222 40% 11% / 0.6;
     --glass-border: 210 40% 98% / 0.1;
-    
+
     /* Gradients */
     --gradient-primary: linear-gradient(135deg, hsl(178, 90%, 55%), hsl(178, 90%, 45%));
     --gradient-gold: linear-gradient(135deg, hsl(45, 100%, 55%), hsl(35, 100%, 50%));
     --gradient-premium: linear-gradient(135deg, hsl(262, 52%, 47%), hsl(262, 52%, 37%));
     --gradient-dark: linear-gradient(180deg, hsl(222, 47%, 8%), hsl(222, 47%, 6%));
-    
+
     /* Effects */
     --glow-primary: 0 0 20px hsl(178, 90%, 55% / 0.5);
     --glow-gold: 0 0 20px hsl(45, 100%, 55% / 0.5);
-    
+
     --sidebar-background: 222 47% 8%;
     --sidebar-foreground: 210 40% 98%;
     --sidebar-primary: 178 90% 55%;
@@ -72,49 +83,59 @@ All colors MUST be HSL.
     --sidebar-ring: 178 90% 55%;
   }
 
-  /* Light mode */
+  /* Light mode - Enhanced */
   .light {
-    --background: 0 0% 100%;
-    --foreground: 222 47% 8%;
+    /* Clean white to soft grey backgrounds */
+    --background: 0 0% 98%;
+    --foreground: 222 47% 11%;
 
-    --card: 0 0% 96%;
-    --card-foreground: 222 47% 8%;
+    /* Softer card with slight grey tint */
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222 47% 8%;
+    --popover-foreground: 222 47% 11%;
 
-    --primary: 178 90% 45%;
+    /* Vibrant primary for light mode */
+    --primary: 178 85% 40%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 262 52% 55%;
+    /* Softer secondary */
+    --secondary: 262 45% 50%;
     --secondary-foreground: 0 0% 100%;
 
-    --muted: 222 30% 88%;
-    --muted-foreground: 215 20% 35%;
+    /* Lighter muted backgrounds */
+    --muted: 222 15% 94%;
+    --muted-foreground: 222 20% 40%;
 
-    --accent: 45 100% 50%;
+    /* Gold accent remains vibrant */
+    --accent: 45 96% 48%;
     --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 85% 55%;
+    --destructive: 0 80% 50%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 222 30% 88%;
-    --input: 222 30% 88%;
-    --ring: 178 90% 45%;
+    /* Subtle borders */
+    --border: 222 15% 90%;
+    --input: 222 15% 92%;
+    --ring: 178 85% 40%;
 
-    --glass: 0 0% 100% / 0.7;
-    --glass-border: 222 47% 8% / 0.1;
+    /* Glass effect for light mode */
+    --glass: 0 0% 100% / 0.8;
+    --glass-border: 222 47% 11% / 0.08;
 
-    --gradient-dark: linear-gradient(180deg, hsl(0, 0%, 100%), hsl(0, 0%, 96%));
+    /* Light gradient */
+    --gradient-dark: linear-gradient(180deg, hsl(0, 0%, 98%), hsl(222, 15%, 96%));
 
+    /* Sidebar - clean white with subtle accents */
     --sidebar-background: 0 0% 100%;
-    --sidebar-foreground: 222 47% 8%;
-    --sidebar-primary: 178 90% 45%;
+    --sidebar-foreground: 222 47% 11%;
+    --sidebar-primary: 178 85% 40%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 0 0% 96%;
-    --sidebar-accent-foreground: 222 47% 8%;
-    --sidebar-border: 222 30% 88%;
-    --sidebar-ring: 178 90% 45%;
+    --sidebar-accent: 222 15% 96%;
+    --sidebar-accent-foreground: 222 47% 11%;
+    --sidebar-border: 222 15% 92%;
+    --sidebar-ring: 178 85% 40%;
   }
 }
 
@@ -129,7 +150,7 @@ All colors MUST be HSL.
   }
 
   .light body {
-    background: linear-gradient(180deg, hsl(0, 0%, 100%), hsl(0, 0%, 96%));
+    background: linear-gradient(180deg, hsl(0, 0%, 98%), hsl(222, 15%, 96%));
   }
 }
 
@@ -141,22 +162,22 @@ All colors MUST be HSL.
   .light .glass-card {
     @apply border-black/10;
   }
-  
+
   .gold-glow {
     box-shadow: 0 0 20px hsl(45, 100%, 55% / 0.5);
   }
-  
+
   .primary-glow {
     box-shadow: 0 0 20px hsl(178, 90%, 55% / 0.5);
   }
-  
+
   .text-gradient-gold {
     background: linear-gradient(135deg, hsl(45, 100%, 55%), hsl(35, 100%, 50%));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
-  
+
   .text-gradient-primary {
     background: linear-gradient(135deg, hsl(178, 90%, 55%), hsl(178, 90%, 45%));
     -webkit-background-clip: text;

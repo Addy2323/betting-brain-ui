@@ -4,11 +4,19 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { TrendingUp, ShoppingBag, Wallet, Users, Gift } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useLocalStorage } from '@/hooks/useLocalStorage';
+import { DASHBOARD_METRICS } from '@/config/mockData';
 
 export default function UserDashboard() {
   usePageLoading();
   const { user } = useAuth();
   const navigate = useNavigate();
+
+  // Load metrics from localStorage
+  const [accountBalance] = useLocalStorage('userAccountBalance', DASHBOARD_METRICS.user.accountBalance);
+  const [slipsPurchased] = useLocalStorage('userSlipsPurchased', DASHBOARD_METRICS.user.slipsPurchased);
+  const [winRate] = useLocalStorage('userWinRate', DASHBOARD_METRICS.user.winRate);
+  const [referralBonus] = useLocalStorage('userReferralBonus', DASHBOARD_METRICS.user.referralBonus);
 
   const quickActions = [
     {
@@ -57,19 +65,19 @@ export default function UserDashboard() {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <Card className="glass-card p-6 border-primary/20">
           <div className="text-sm text-muted-foreground mb-2">Account Balance</div>
-          <div className="text-2xl font-bold text-gradient-primary">Tsh0.00</div>
+          <div className="text-2xl font-bold text-gradient-primary">TSH {accountBalance.toLocaleString()}</div>
         </Card>
         <Card className="glass-card p-6 border-primary/20">
           <div className="text-sm text-muted-foreground mb-2">Slips Purchased</div>
-          <div className="text-2xl font-bold text-gradient-primary">0</div>
+          <div className="text-2xl font-bold text-gradient-primary">{slipsPurchased}</div>
         </Card>
         <Card className="glass-card p-6 border-primary/20">
           <div className="text-sm text-muted-foreground mb-2">Win Rate</div>
-          <div className="text-2xl font-bold text-gradient-primary">0%</div>
+          <div className="text-2xl font-bold text-gradient-primary">{winRate}%</div>
         </Card>
         <Card className="glass-card p-6 border-primary/20">
           <div className="text-sm text-muted-foreground mb-2">Referral Bonus</div>
-          <div className="text-2xl font-bold text-gradient-primary">Tsh0.00</div>
+          <div className="text-2xl font-bold text-gradient-primary">TSH {referralBonus.toLocaleString()}</div>
         </Card>
       </div>
 

@@ -4,53 +4,20 @@ import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Users, Gift, Copy, Share2, Trophy, Star } from 'lucide-react';
 import { toast } from 'sonner';
+import { useLocalStorage } from '@/hooks/useLocalStorage';
+import { STORAGE_KEYS } from '@/lib/storageKeys';
+import { MOCK_DATA, REFERRAL_CONFIG } from '@/config/mockData';
 
 const Referrals = () => {
-  const referralCode = 'BRAIN247';
-  const totalReferrals = 7;
+  const [referralCode, setReferralCode] = useLocalStorage(STORAGE_KEYS.REFERRAL_CODE, REFERRAL_CONFIG.defaultCode);
+  const [totalReferrals, setTotalReferrals] = useLocalStorage(STORAGE_KEYS.REFERRAL_HISTORY, REFERRAL_CONFIG.defaultReferrals);
+  const [referralEarnings, setReferralEarnings] = useLocalStorage(STORAGE_KEYS.REFERRAL_EARNINGS, REFERRAL_CONFIG.defaultEarnings);
   
-  const tiers = [
-    {
-      name: 'Bronze',
-      icon: Trophy,
-      required: 3,
-      reward: 'TSH 10,000 bonus',
-      color: 'text-orange-400',
-      bgColor: 'bg-orange-400/20',
-      borderColor: 'border-orange-400/50',
-      achieved: true,
-    },
-    {
-      name: 'Silver',
-      icon: Trophy,
-      required: 10,
-      reward: 'TSH 30,000 bonus + 5% commission',
-      color: 'text-gray-300',
-      bgColor: 'bg-gray-300/20',
-      borderColor: 'border-gray-300/50',
-      achieved: false,
-    },
-    {
-      name: 'Gold',
-      icon: Star,
-      required: 25,
-      reward: 'TSH 100,000 bonus + 10% commission',
-      color: 'text-gold',
-      bgColor: 'bg-gold/20',
-      borderColor: 'border-gold/50',
-      achieved: false,
-    },
-    {
-      name: 'Diamond',
-      icon: Star,
-      required: 100,
-      reward: 'TSH 500,000 bonus + 15% lifetime commission',
-      color: 'text-primary',
-      bgColor: 'bg-primary/20',
-      borderColor: 'border-primary/50',
-      achieved: false,
-    },
-  ];
+  const tiers = MOCK_DATA.referralTiers.map((tier, index) => ({
+    ...tier,
+    icon: index < 2 ? Trophy : Star,
+    achieved: index === 0,
+  }));
 
   const nextTier = tiers.find(tier => !tier.achieved);
   const progressToNext = nextTier ? (totalReferrals / nextTier.required) * 100 : 100;
