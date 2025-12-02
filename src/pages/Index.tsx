@@ -32,61 +32,66 @@ const Index = () => {
   ];
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 w-full overflow-x-hidden">
       {/* Free Daily Brain Banner Carousel */}
-      <FreeBrainCarousel
-        autoPlay={true}
-        autoPlayInterval={5000}
-      />
+      <div className="w-full min-w-0">
+        <FreeBrainCarousel
+          autoPlay={true}
+          autoPlayInterval={5000}
+        />
+      </div>
 
       {/* Search Bar */}
-      <div className="relative">
+      <div className="relative w-full min-w-0">
         <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
         <Input
           type="text"
           placeholder="Search for tipster"
-          className="pl-12 h-14 bg-gray-800/50 border-gray-700 text-white placeholder:text-gray-400 rounded-2xl text-lg"
+          className="pl-12 h-12 bg-muted/50 border-border text-foreground placeholder:text-muted-foreground rounded-2xl text-sm md:text-base w-full"
         />
       </div>
 
       {/* Top Tipsters Section */}
-      <div className="space-y-4">
-        <div className="flex items-center gap-3">
-          <div className="p-2 bg-primary/20 rounded-xl">
-            <Target className="h-6 w-6 text-primary" />
+      <div className="space-y-3 w-full min-w-0">
+        <div className="flex items-center gap-2">
+          <div className="p-2 bg-primary/20 rounded-xl flex-shrink-0">
+            <Target className="h-5 w-5 md:h-6 md:w-6 text-primary" />
           </div>
-          <h2 className="font-display text-2xl font-bold">Top Tipsters</h2>
+          <h2 className="font-display text-lg md:text-2xl font-bold truncate">Top Tipsters</h2>
         </div>
-        <TipsterCarousel tipsters={topTipsters} autoPlay={true} autoPlayInterval={3000} />
+        <div className="w-full min-w-0">
+          <TipsterCarousel tipsters={topTipsters} autoPlay={true} autoPlayInterval={3000} />
+        </div>
       </div>
 
       {/* Tipsters to Follow Section */}
-      <div className="space-y-4">
-        <div className="flex items-center gap-3">
-          <div className="p-2 bg-emerald-500/20 rounded-xl">
-            <CheckCircle2 className="h-6 w-6 text-emerald-500" />
+      <div className="space-y-3 w-full min-w-0">
+        <div className="flex items-center gap-2">
+          <div className="p-2 bg-emerald-500/20 rounded-xl flex-shrink-0">
+            <CheckCircle2 className="h-5 w-5 md:h-6 md:w-6 text-emerald-500" />
           </div>
-          <h2 className="font-display text-2xl font-bold">Tipsters to follow</h2>
+          <h2 className="font-display text-lg md:text-2xl font-bold truncate">Tipsters to follow</h2>
         </div>
-        <TipsterCarousel tipsters={tipstersToFollow} autoPlay={true} autoPlayInterval={3000} />
+        <div className="w-full min-w-0">
+          <TipsterCarousel tipsters={tipstersToFollow} autoPlay={true} autoPlayInterval={3000} />
+        </div>
       </div>
 
-
       {/* Main Content Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 w-full min-w-0">
         {/* Trending Slips - Takes 2 columns */}
-        <div className="lg:col-span-2 space-y-6">
-          <div className="flex items-center justify-between">
-            <h2 className="font-display text-2xl font-bold flex items-center gap-2">
-              <TrendingUp className="h-6 w-6 text-primary" />
-              Trending Slips
+        <div className="lg:col-span-2 space-y-4 w-full min-w-0">
+          <div className="flex items-center justify-between gap-2">
+            <h2 className="font-display text-lg md:text-2xl font-bold flex items-center gap-2 truncate">
+              <TrendingUp className="h-5 w-5 md:h-6 md:w-6 text-primary flex-shrink-0" />
+              <span className="truncate">Trending Slips</span>
             </h2>
-            <Button variant="ghost" className="text-primary">
+            <Button variant="ghost" className="text-primary text-xs md:text-sm flex-shrink-0">
               View All →
             </Button>
           </div>
 
-          <div className="grid gap-6">
+          <div className="grid gap-4 w-full min-w-0">
             {MOCK_DATA.indexTrendingSlips.map((slip, idx) => (
               <SlipCard key={idx} {...slip} />
             ))}
@@ -94,7 +99,7 @@ const Index = () => {
         </div>
 
         {/* Sidebar - BrainScore Widget */}
-        <div className="space-y-6">
+        <div className="space-y-4 w-full min-w-0">
           <BrainScoreWidget
             score={742}
             winRate={68}
@@ -104,26 +109,26 @@ const Index = () => {
           />
 
           {/* Quick Stats */}
-          <Card className="glass-card p-6">
-            <h3 className="font-display text-lg font-bold mb-4">
+          <Card className="glass-card p-4 md:p-6">
+            <h3 className="font-display text-base md:text-lg font-bold mb-3 md:mb-4">
               Your Activity
             </h3>
-            <div className="space-y-4">
+            <div className="space-y-3 md:space-y-4">
               <div className="flex items-center justify-between">
-                <span className="text-sm text-muted-foreground">Purchased Slips</span>
-                <span className="font-bold text-primary">{purchasedSlips}</span>
+                <span className="text-xs md:text-sm text-muted-foreground">Purchased Slips</span>
+                <span className="font-bold text-primary text-sm md:text-base">{purchasedSlips}</span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm text-muted-foreground">Win Rate</span>
-                <span className="font-bold text-win-green">{winRate}%</span>
+                <span className="text-xs md:text-sm text-muted-foreground">Win Rate</span>
+                <span className="font-bold text-win-green text-sm md:text-base">{winRate}%</span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm text-muted-foreground">Total Profit</span>
-                <span className="font-bold text-gold">+TSH {totalProfit.toLocaleString()}</span>
+                <span className="text-xs md:text-sm text-muted-foreground">Total Profit</span>
+                <span className="font-bold text-gold text-sm md:text-base">+TSH {totalProfit.toLocaleString()}</span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm text-muted-foreground">Referrals</span>
-                <span className="font-bold">{referrals}</span>
+                <span className="text-xs md:text-sm text-muted-foreground">Referrals</span>
+                <span className="font-bold text-sm md:text-base">{referrals}</span>
               </div>
             </div>
           </Card>

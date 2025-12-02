@@ -54,7 +54,7 @@ const superAdminNavItems = [
 ];
 
 export function AppSidebar() {
-  const { state } = useSidebar();
+  const { state, toggleSidebar } = useSidebar();
   const location = useLocation();
   const navigate = useNavigate();
   const { role, setRole } = useRole();
@@ -64,6 +64,13 @@ export function AppSidebar() {
   const handleLogout = () => {
     logout();
     navigate('/');
+  };
+
+  const handleNavClick = () => {
+    // Close sidebar on mobile when a nav item is clicked
+    if (!isCollapsed && window.innerWidth < 1024) {
+      toggleSidebar();
+    }
   };
 
 
@@ -123,6 +130,7 @@ export function AppSidebar() {
                     <SidebarMenuButton asChild>
                       <NavLink
                         to={item.url}
+                        onClick={handleNavClick}
                         className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-all ${
                           isActive
                             ? 'bg-primary text-primary-foreground'

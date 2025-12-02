@@ -83,59 +83,66 @@ All colors MUST be HSL.
     --sidebar-ring: 178 90% 55%;
   }
 
-  /* Light mode - Enhanced */
+  /* Light mode - Modern Professional Design */
   .light {
-    /* Clean white to soft grey backgrounds */
-    --background: 0 0% 98%;
-    --foreground: 222 47% 11%;
+    /* Premium light backgrounds with subtle warmth */
+    --background: 210 40% 96%;
+    --foreground: 210 20% 15%;
 
-    /* Softer card with slight grey tint */
-    --card: 0 0% 100%;
-    --card-foreground: 222 47% 11%;
+    /* Milk/cream colored cards for soft elegance */
+    --card: 40 100% 97%;
+    --card-foreground: 210 20% 15%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222 47% 11%;
+    --popover-foreground: 210 20% 15%;
 
-    /* Vibrant primary for light mode */
-    --primary: 178 85% 40%;
+    /* Vibrant teal primary - modern & professional */
+    --primary: 176 100% 42%;
     --primary-foreground: 0 0% 100%;
 
-    /* Softer secondary */
-    --secondary: 262 45% 50%;
+    /* Rich purple secondary */
+    --secondary: 268 85% 52%;
     --secondary-foreground: 0 0% 100%;
 
-    /* Lighter muted backgrounds */
-    --muted: 222 15% 94%;
-    --muted-foreground: 222 20% 40%;
+    /* Soft grey for muted elements */
+    --muted: 210 15% 88%;
+    --muted-foreground: 210 15% 45%;
 
-    /* Gold accent remains vibrant */
-    --accent: 45 96% 48%;
+    /* Vibrant gold accent for wins */
+    --accent: 42 100% 50%;
     --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 80% 50%;
+    /* Red for destructive actions */
+    --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    /* Subtle borders */
-    --border: 222 15% 90%;
-    --input: 222 15% 92%;
-    --ring: 178 85% 40%;
+    /* Refined borders and inputs */
+    --border: 210 20% 88%;
+    --input: 210 15% 92%;
+    --ring: 176 100% 42%;
 
-    /* Glass effect for light mode */
-    --glass: 0 0% 100% / 0.8;
-    --glass-border: 222 47% 11% / 0.08;
+    /* Frosted glass effect for light mode */
+    --glass: 255 255% 255% / 0.7;
+    --glass-border: 210 20% 15% / 0.08;
 
-    /* Light gradient */
-    --gradient-dark: linear-gradient(180deg, hsl(0, 0%, 98%), hsl(222, 15%, 96%));
+    /* Smooth light gradient */
+    --gradient-dark: linear-gradient(180deg, hsl(210, 40%, 96%), hsl(210, 30%, 92%));
 
-    /* Sidebar - clean white with subtle accents */
+    /* Sidebar - premium white with teal accents */
     --sidebar-background: 0 0% 100%;
-    --sidebar-foreground: 222 47% 11%;
-    --sidebar-primary: 178 85% 40%;
+    --sidebar-foreground: 210 20% 15%;
+    --sidebar-primary: 176 100% 42%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 222 15% 96%;
-    --sidebar-accent-foreground: 222 47% 11%;
-    --sidebar-border: 222 15% 92%;
-    --sidebar-ring: 178 85% 40%;
+    --sidebar-accent: 210 15% 92%;
+    --sidebar-accent-foreground: 210 20% 15%;
+    --sidebar-border: 210 20% 88%;
+    --sidebar-ring: 176 100% 42%;
+
+    /* Custom brand colors for light mode */
+    --gold: 42 100% 50%;
+    --gold-glow: 42 100% 65%;
+    --win-green: 142 76% 50%;
+    --loss-red: 0 84% 60%;
   }
 }
 

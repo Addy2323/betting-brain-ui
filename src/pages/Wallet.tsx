@@ -3,9 +3,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { ArrowDown, ArrowUp, Clock, CheckCircle2, XCircle } from 'lucide-react';
+import { ArrowDown, Clock, CheckCircle2, XCircle } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
 import { PaymentMethods } from '@/components/PaymentMethods';
 
 import { useState, useEffect } from 'react';
@@ -29,11 +28,7 @@ function Wallet() {
   const [transactions, setTransactions] = useLocalStorage<Transaction[]>(STORAGE_KEYS.TRANSACTION_HISTORY, []);
   const [depositAmount, setDepositAmount] = useState('');
   const [selectedDepositMethod, setSelectedDepositMethod] = useState<string | null>(null);
-  const [selectedWithdrawMethod, setSelectedWithdrawMethod] = useState<string | null>(null);
   const [pendingSubscription, setPendingSubscription] = useState<any>(null);
-  const [currentWithdrawn, setCurrentWithdrawn] = useState(0);
-  const withdrawalLimit = 500;
-  const withdrawalProgress = (currentWithdrawn / withdrawalLimit) * 100;
 
   useEffect(() => {
     const pending = subscriptionUtils.getPendingSubscription();
@@ -129,34 +124,14 @@ return (
             <ArrowDown className="h-5 w-5" />
             Deposit
           </Button>
-          <Button size="lg" variant="outline" className="border-primary/30 gap-2">
-            <ArrowUp className="h-5 w-5" />
-            Withdraw
-          </Button>
         </div>
       </div>
     </Card>
 
-    {/* Withdrawal Limits */}
-    <Card className="glass-card p-6">
-      <h3 className="font-display text-lg font-bold mb-4">Monthly Withdrawal Limit</h3>
-      <div className="space-y-3">
-        <div className="flex items-center justify-between text-sm">
-          <span className="text-muted-foreground">Used this month</span>
-          <span className="font-bold">TSH {currentWithdrawn * 1000} / TSH {withdrawalLimit * 1000}</span>
-        </div>
-        <Progress value={withdrawalProgress} className="h-3" />
-        <p className="text-xs text-muted-foreground">
-          TSH {(withdrawalLimit - currentWithdrawn) * 1000} remaining for this billing cycle
-        </p>
-      </div>
-    </Card>
-
-    {/* Deposit/Withdraw Tabs */}
+    {/* Deposit Tab */}
     <Tabs defaultValue="deposit" className="w-full">
-      <TabsList className="grid w-full grid-cols-2">
+      <TabsList className="grid w-full grid-cols-1">
         <TabsTrigger value="deposit">Deposit</TabsTrigger>
-        <TabsTrigger value="withdraw">Withdraw</TabsTrigger>
       </TabsList>
 
       <TabsContent value="deposit" className="space-y-4 mt-6">
@@ -272,135 +247,6 @@ return (
         </Card>
       </TabsContent>
 
-      <TabsContent value="withdraw" className="space-y-4 mt-6">
-        <Card className="glass-card p-6">
-          <h3 className="font-display text-lg font-bold mb-6">Withdraw Funds</h3>
-          <div className="space-y-4">
-            <div>
-              <Label htmlFor="withdraw-amount">Amount (TSH)</Label>
-              <Input
-                id="withdraw-amount"
-                type="number"
-                placeholder="Enter amount"
-                className="mt-2"
-              />
-            </div>
-
-            <div>
-              <Label htmlFor="phone">M-Pesa Phone Number</Label>
-              <Input
-                id="phone"
-                type="tel"
-                placeholder="+254 xxx xxx xxx"
-                className="mt-2"
-              />
-            </div>
-
-            <div>
-              <Label>Withdrawal Method</Label>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-2">
-                <Button
-                  onClick={() => setSelectedWithdrawMethod('mpesa')}
-                  className={`h-auto p-4 flex flex-col gap-3 transition-all ${selectedWithdrawMethod === 'mpesa'
-                    ? 'border-2 border-primary bg-primary/10'
-                    : 'border border-border hover:border-primary'
-                    }`}
-                  variant="outline"
-                >
-                  <img src="/mpesa.png" alt="M-Pesa" className="h-8 w-auto" />
-                  <div>
-                    <span className="font-bold text-win-green block text-xs">M-Pesa</span>
-                    <span className="text-xs text-muted-foreground">5-15 mins</span>
-                  </div>
-                  {selectedWithdrawMethod === 'mpesa' && (
-                    <Badge className="mt-2 bg-primary text-primary-foreground">Selected</Badge>
-                  )}
-                </Button>
-                <Button
-                  onClick={() => setSelectedWithdrawMethod('airtel')}
-                  className={`h-auto p-4 flex flex-col gap-3 transition-all ${selectedWithdrawMethod === 'airtel'
-                    ? 'border-2 border-primary bg-primary/10'
-                    : 'border border-border hover:border-primary'
-                    }`}
-                  variant="outline"
-                >
-                  <img src="/airtelmoney.png" alt="Airtel Money" className="h-8 w-auto" />
-                  <div>
-                    <span className="font-bold block text-xs">Airtel Money</span>
-                    <span className="text-xs text-muted-foreground">5-15 mins</span>
-                  </div>
-                  {selectedWithdrawMethod === 'airtel' && (
-                    <Badge className="mt-2 bg-primary text-primary-foreground">Selected</Badge>
-                  )}
-                </Button>
-                <Button
-                  onClick={() => setSelectedWithdrawMethod('bank')}
-                  className={`h-auto p-4 flex flex-col gap-3 transition-all ${selectedWithdrawMethod === 'bank'
-                    ? 'border-2 border-primary bg-primary/10'
-                    : 'border border-border hover:border-primary'
-                    }`}
-                  variant="outline"
-                >
-                  <img src="/bank.png" alt="Bank" className="h-8 w-auto" />
-                  <div>
-                    <span className="font-bold block text-xs">Bank Transfer</span>
-                    <span className="text-xs text-muted-foreground">1-2 hours</span>
-                  </div>
-                  {selectedWithdrawMethod === 'bank' && (
-                    <Badge className="mt-2 bg-primary text-primary-foreground">Selected</Badge>
-                  )}
-                </Button>
-                <Button
-                  onClick={() => setSelectedWithdrawMethod('halopesa')}
-                  className={`h-auto p-4 flex flex-col gap-3 transition-all ${selectedWithdrawMethod === 'halopesa'
-                    ? 'border-2 border-primary bg-primary/10'
-                    : 'border border-border hover:border-primary'
-                    }`}
-                  variant="outline"
-                >
-                  <img src="/halopesa.png" alt="Halopesa" className="h-8 w-auto" />
-                  <div>
-                    <span className="font-bold block text-xs">Halopesa</span>
-                    <span className="text-xs text-muted-foreground">5-15 mins</span>
-                  </div>
-                  {selectedWithdrawMethod === 'halopesa' && (
-                    <Badge className="mt-2 bg-primary text-primary-foreground">Selected</Badge>
-                  )}
-                </Button>
-              </div>
-            </div>
-
-            <div className="bg-muted/30 p-4 rounded-lg space-y-2 text-sm">
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">Withdrawal Fee</span>
-                <span className="font-medium">TSH 500</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">Processing Time</span>
-                <span className="font-medium">5-15 mins</span>
-              </div>
-            </div>
-
-            <Button
-              className={`w-full transition-all ${selectedWithdrawMethod
-                ? 'bg-primary hover:bg-primary/90'
-                : 'bg-muted text-muted-foreground cursor-not-allowed'
-                }`}
-              size="lg"
-              disabled={!selectedWithdrawMethod}
-            >
-              {selectedWithdrawMethod
-                ? `Request Withdrawal via ${selectedWithdrawMethod === 'mpesa' ? 'M-Pesa' :
-                  selectedWithdrawMethod === 'airtel' ? 'Airtel Money' :
-                    selectedWithdrawMethod === 'bank' ? 'Bank Transfer' :
-                      'Halopesa'
-                }`
-                : 'Select a withdrawal method'
-              }
-            </Button>
-          </div>
-        </Card>
-      </TabsContent>
     </Tabs>
 
     {/* Transaction History */}
@@ -423,10 +269,8 @@ return (
               >
                 {tx.type === 'deposit' ? (
                   <ArrowDown className="h-5 w-5 text-win-green" />
-                ) : tx.type === 'withdrawal' ? (
-                  <ArrowUp className="h-5 w-5 text-primary" />
                 ) : (
-                  <ArrowUp className="h-5 w-5 text-secondary" />
+                  <ArrowDown className="h-5 w-5 text-secondary" />
                 )}
               </div>
               <div>

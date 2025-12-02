@@ -103,16 +103,16 @@ const BetslipDetails = () => {
 
                 {/* Odds */}
                 <div>
-                    <div className="text-5xl font-bold text-white">{betslip.odds}</div>
+                    <div className="text-5xl font-bold text-foreground">{betslip.odds}</div>
                     <div className="text-lg text-muted-foreground">Odds</div>
                 </div>
 
                 {/* Validity Time and Price */}
                 <div className="flex items-center justify-between">
                     <div className="text-sm text-muted-foreground">
-                        Validity Time • <span className="text-white font-medium">{betslip.validityTime}</span>
+                        Validity Time • <span className="text-foreground font-medium">{betslip.validityTime}</span>
                     </div>
-                    <div className="text-2xl font-bold text-white">
+                    <div className="text-2xl font-bold text-foreground">
                         {isSubscribed ? (
                             <span className="text-emerald-500">FREE</span>
                         ) : (
@@ -164,7 +164,7 @@ const BetslipDetails = () => {
                         <div className="absolute inset-0 flex items-center justify-center">
                             <Button
                                 size="lg"
-                                className="bg-gray-600/80 hover:bg-gray-700/90 text-white font-bold gap-2 backdrop-blur-sm"
+                                className="bg-gray-600/80 hover:bg-gray-700/90 text-foreground font-bold gap-2 backdrop-blur-sm"
                                 onClick={() => navigate('/wallet')}
                             >
                                 <Eye className="h-5 w-5" />

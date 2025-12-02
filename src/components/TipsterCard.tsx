@@ -50,7 +50,7 @@ export const TipsterCard = ({ id, name, accuracy, image, verified = false }: Tip
                 <div className="p-4 space-y-3">
                     {/* Name and Verification */}
                     <div className="flex items-center gap-2">
-                        <h3 className="font-display font-bold text-lg text-white">{name}</h3>
+                        <h3 className="font-display font-bold text-lg text-foreground">{name}</h3>
                         {verified && (
                             <CheckCircle className="h-5 w-5 text-green-500 fill-green-500" />
                         )}
@@ -58,7 +58,7 @@ export const TipsterCard = ({ id, name, accuracy, image, verified = false }: Tip
 
                     {/* Accuracy */}
                     <div className="text-center">
-                        <div className="text-3xl font-bold text-white">{accuracy}%</div>
+                        <div className="text-3xl font-bold text-foreground">{accuracy}%</div>
                         <div className="text-sm text-muted-foreground">Accuracy</div>
                     </div>
 

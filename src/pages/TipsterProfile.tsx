@@ -135,7 +135,7 @@ const TipsterProfile = () => {
                         <div className="text-center space-y-4">
                             {/* Name */}
                             <div className="flex items-center justify-center gap-2">
-                                <h2 className="font-display text-3xl font-bold text-white">
+                                <h2 className="font-display text-3xl font-bold text-foreground">
                                     {tipster.name}
                                 </h2>
                                 {tipster.verified && (
@@ -146,15 +146,15 @@ const TipsterProfile = () => {
                             {/* Stats Grid */}
                             <div className="grid grid-cols-3 gap-6 py-6">
                                 <div className="space-y-1">
-                                    <div className="text-3xl font-bold text-white">{tipster.subscribers}</div>
+                                    <div className="text-3xl font-bold text-foreground">{tipster.subscribers}</div>
                                     <div className="text-sm text-muted-foreground">Subscribers</div>
                                 </div>
                                 <div className="space-y-1">
-                                    <div className="text-3xl font-bold text-white">{tipster.accuracy}%</div>
+                                    <div className="text-3xl font-bold text-foreground">{tipster.accuracy}%</div>
                                     <div className="text-sm text-muted-foreground">Accuracy</div>
                                 </div>
                                 <div className="space-y-1">
-                                    <div className="text-3xl font-bold text-white">{tipster.betslipsCount}</div>
+                                    <div className="text-3xl font-bold text-foreground">{tipster.betslipsCount}</div>
                                     <div className="text-sm text-muted-foreground">Betslips</div>
                                 </div>
                             </div>
@@ -201,7 +201,7 @@ const TipsterProfile = () => {
                                     {/* Odds and Status */}
                                     <div className="flex items-start justify-between">
                                         <div>
-                                            <div className="text-4xl font-bold text-white">{betslip.odds}</div>
+                                            <div className="text-4xl font-bold text-foreground">{betslip.odds}</div>
                                             <div className="text-sm text-muted-foreground">Odds</div>
                                         </div>
                                         <Badge className="bg-green-500/20 text-green-400 border-green-500/50">
@@ -211,11 +211,11 @@ const TipsterProfile = () => {
 
                                     {/* Validity Time */}
                                     <div className="text-sm text-muted-foreground">
-                                        Validity Time • <span className="text-white font-medium">{betslip.validityTime}</span>
+                                        Validity Time • <span className="text-foreground font-medium">{betslip.validityTime}</span>
                                     </div>
 
                                     {/* Price */}
-                                    <div className="text-2xl font-bold text-white">
+                                    <div className="text-2xl font-bold text-foreground">
                                         Tzs {betslip.price.toLocaleString()}/=
                                     </div>
 
