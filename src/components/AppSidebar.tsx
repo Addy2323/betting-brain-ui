@@ -2,7 +2,7 @@ import {
   Home, TrendingUp, ShoppingBag, Wallet, Users, 
   Gift, Brain, FileText, DollarSign, Award, 
   UserCheck, BarChart3, AlertTriangle, Flag,
-  Shield, Settings, Lock, LogOut
+  Shield, Settings, Lock, LogOut, Eye, LayoutDashboard, UserPlus
 } from 'lucide-react';
 import { NavLink } from '@/components/NavLink';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -32,7 +32,9 @@ const userNavItems = [
 ];
 
 const tipsterNavItems = [
+  { title: 'Dashboard', url: '/tipster-dashboard', icon: LayoutDashboard },
   { title: 'Create Slip', url: '/create-slip', icon: FileText },
+  { title: 'My Slips', url: '/my-slips', icon: Eye },
   { title: 'Revenue', url: '/revenue', icon: DollarSign },
   { title: 'BrainScore', url: '/brainscore', icon: Brain },
   { title: 'Badges', url: '/badges', icon: Award },
@@ -40,6 +42,7 @@ const tipsterNavItems = [
 ];
 
 const adminNavItems = [
+  { title: 'Add Tipster', url: '/add-tipster', icon: UserPlus },
   { title: 'Verify Tipsters', url: '/verify-tipsters', icon: UserCheck },
   { title: 'Finance Dashboard', url: '/finance', icon: BarChart3 },
   { title: 'Withdrawals', url: '/withdrawals', icon: DollarSign },

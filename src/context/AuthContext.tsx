@@ -4,6 +4,8 @@ import { STORAGE_KEYS } from '@/lib/storageKeys';
 import { DEFAULT_STATS, DASHBOARD_METRICS, WALLET_CONFIG, REFERRAL_CONFIG } from '@/config/mockData';
 import { showSuccessAlert, showErrorAlert, showWarningAlert } from '@/lib/sweetalert';
 import { seedDefaultUsers, areDefaultUsersSeeded } from '@/lib/seedUsers';
+import axios from 'axios';
+import { log } from 'console';
 
 export type UserRole = 'user' | 'tipster' | 'admin' | 'super_admin';
 
@@ -13,6 +15,7 @@ export interface User {
   fullName: string;
   role: UserRole;
   createdAt: string;
+ 
 }
 
 export interface RegisteredUser extends User {
@@ -114,12 +117,22 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   }, []);
 
+
+
+  
+
   const login = async (email: string, password: string, role: UserRole) => {
     setIsLoading(true);
     try {
+
+      const response = await axios.post("http://192.168.0.12:8000/api/auth/login/", { email, password });
+console.log(response.data.user)
+   
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 300));
 
+       StorageUtil.setItem('authUser', response.data.user);
+       StorageUtil.setItem('authToken', response.data.token);
       // Get registered users from storage
       const registeredUsers = StorageUtil.getItem<RegisteredUser[]>(STORAGE_KEYS.REGISTERED_USERS, []);
 
@@ -272,7 +285,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   );
 };
 
-export const useAuth = () => {
+export const  useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
     throw new Error('useAuth must be used within AuthProvider');

@@ -22,7 +22,7 @@ const Index = () => {
   const topTipsters = [
     { id: 'geoff-lea', name: 'Geoff Lea', accuracy: 77.8, image: '/image/profile/p1.png', verified: true },
     { id: 'basketball-pro', name: 'Basketball Pro', accuracy: 70.3, image: '/image/profile/p2.png', verified: false },
-    { id: 'soccer-expert', name: 'Soccer Expert', accuracy: 75.5, image: '/image/profile/p3.png', verified: true },
+    { id: 'soccer-expert', name: 'SoccerExpert', accuracy: 75.5, image: '/image/profile/p3.png', verified: true },
   ];
 
   const tipstersToFollow = [

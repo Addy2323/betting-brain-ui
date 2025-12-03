@@ -5,7 +5,8 @@ import { Button } from '@/components/ui/button';
 import { TrendingUp, ShoppingBag, Wallet, Users, Gift } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
-import { DASHBOARD_METRICS } from '@/config/mockData';
+import { DASHBOARD_METRICS, MOCK_DATA } from '@/config/mockData';
+import { SlipCard } from '@/components/SlipCard';
 
 export default function UserDashboard() {
   usePageLoading();
@@ -101,6 +102,43 @@ export default function UserDashboard() {
               </Card>
             );
           })}
+        </div>
+      </div>
+
+      {/* Trending Slips */}
+      <div>
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-xl font-bold">Trending Slips</h2>
+          <Button variant="outline" onClick={() => navigate('/trending')}>
+            View All
+          </Button>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {(() => {
+            const storedSlips = JSON.parse(localStorage.getItem('trendingSlips') || '[]');
+            const slips = storedSlips.length > 0 ? storedSlips.slice(0, 3) : MOCK_DATA.trendingSlips.slice(0, 3);
+            return slips.map((slip: any) => (
+              <SlipCard
+                key={slip.id}
+                id={slip.id}
+                tipsterName={slip.tipsterName}
+                tipsterAvatar={slip.tipsterAvatar}
+                subscriberCount={slip.subscriberCount || 5300}
+                picks={slip.picks}
+                totalOdds={slip.totalOdds}
+                price={slip.price}
+                winStreak={slip.winStreak || 0}
+                watching={slip.watching || 0}
+                verified={slip.verified}
+                bookmakers={slip.bookmakers || []}
+                bookingCodes={slip.bookingCodes || {}}
+                proofImage={slip.proofImage}
+                matches={slip.matches || []}
+                startTime={slip.startTime}
+                endTime={slip.endTime}
+              />
+            ));
+          })()}
         </div>
       </div>
 

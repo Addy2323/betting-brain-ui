@@ -39,6 +39,7 @@ export const STORAGE_KEYS = {
 
   // Tipster Data
   CREATED_SLIPS: 'createdSlips',
+  TIPSTER_SLIPS: 'tipsterSlips',
   TIPSTER_STATS: 'tipsterStats',
   BRAINSCORE: 'brainScore',
 

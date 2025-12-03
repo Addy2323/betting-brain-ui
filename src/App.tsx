@@ -17,6 +17,7 @@ import Referrals from "./pages/Referrals";
 import Trending from "./pages/Trending";
 import PurchasedSlips from "./pages/PurchasedSlips";
 import CreateSlip from "./pages/CreateSlip";
+import AddTipster from "./pages/AddTipster";
 import VerifyTipsters from "./pages/VerifyTipsters";
 import Finance from "./pages/Finance";
 import Withdrawals from "./pages/Withdrawals";
@@ -30,6 +31,7 @@ import AdminDashboard from "./pages/AdminDashboard";
 import SuperAdminDashboard from "./pages/SuperAdminDashboard";
 import TipsterProfile from "./pages/TipsterProfile";
 import BetslipDetails from "./pages/BetslipDetails";
+import MySlips from "./pages/MySlips";
 
 const queryClient = new QueryClient();
 
@@ -106,7 +108,9 @@ const App = () => (
                     <Route path="/purchased" element={<PurchasedSlips />} />
                     <Route path="/wallet" element={<Wallet />} />
                     <Route path="/referrals" element={<Referrals />} />
+                    <Route path="/tipster-dashboard" element={<TipsterDashboard />} />
                     <Route path="/create-slip" element={<CreateSlip />} />
+                    <Route path="/add-tipster" element={<AddTipster />} />
                     <Route path="/verify-tipsters" element={<VerifyTipsters />} />
                     <Route path="/finance" element={<Finance />} />
                     <Route path="/withdrawals" element={<Withdrawals />} />
@@ -114,6 +118,7 @@ const App = () => (
                     <Route path="/reports" element={<Reports />} />
                     <Route path="/tipster/:tipsterId" element={<TipsterProfile />} />
                     <Route path="/betslip/:betslipId" element={<BetslipDetails />} />
+                    <Route path="/my-slips" element={<MySlips />} />
                     {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                     <Route path="*" element={<NotFound />} />
                   </Route>
